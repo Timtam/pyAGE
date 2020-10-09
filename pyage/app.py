@@ -50,14 +50,17 @@ class App:
     def Quit(self) -> None:
         self._quit = True
 
-    def Process(self, fn: Optional[Callable[[], None]] = None) -> None:
+    def Process(self, fn: Optional[Callable[["App", float], None]] = None) -> None:
 
         current_time: float
         frame_length: float = 1.0 / self._fps
-        frame_time: float
+        frame_time: float = time.time()
+        previous_frame: float
         time_diff: float
 
         while not self._quit:
+
+            previous_frame = frame_time
 
             frame_time = time.time()
 
@@ -68,7 +71,7 @@ class App:
                     break
 
                 if fn:
-                    fn()
+                    fn(self, frame_time - previous_frame)
 
                 current_time = time.time()
 
