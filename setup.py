@@ -1,0 +1,21 @@
+import os
+
+from setuptools import find_packages, setup
+from setuptools.command.build_ext import build_ext
+
+setup(
+    name="pyAGE",
+    version="0.1",
+    author="Toni Barth",
+    author_email="software@satoprogs.de",
+    url="https://github.com/Timtam/pyAGE",
+    packages=find_packages(),
+    setup_requires=[
+        "flake8",
+    ],
+    install_requires=[
+        "cytolk==0.1.3",
+        "pygame==1.9.6",
+        "synthizer==0.7.3",
+    ],
+)
