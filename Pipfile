@@ -13,6 +13,7 @@ black = "*"
 flake8 = "*"
 isort = "*"
 mypy = "*"
+pre-commit = "*"
 
 [requires]
 python_version = "3.8"
