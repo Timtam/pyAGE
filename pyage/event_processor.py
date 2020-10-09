@@ -25,16 +25,11 @@ class EventProcessor:
 
         if e.type == pygame.KEYDOWN or e.type == pygame.KEYUP:
 
-            f_type: int = EVENT.KEYDOWN
-
-            if e.type == pygame.KEYUP:
-                f_type = EVENT.KEYUP
-
             try:
                 f = next(
                     r_f
                     for r_f in self._registered_events
-                    if r_f._type == f_type
+                    if r_f._type == EVENT.KEY
                     and cast(KeyEvent, r_f)._key == e.key
                     and e.mod & cast(KeyEvent, r_f)._mod == cast(KeyEvent, r_f)._mod
                 )
@@ -42,11 +37,17 @@ class EventProcessor:
                 f = None
 
             if f:
+
+                r_f = copy.copy(f)
+                cast(KeyEvent, r_f)._pressed = (
+                    True if e.type == pygame.KEYDOWN else False
+                )
+
                 heapq.heappush(
                     self._event_queue,
                     (
                         time.time(),
-                        f,
+                        r_f,
                     ),
                 )
 
@@ -75,8 +76,8 @@ class EventProcessor:
         if e in self._unregistered_events:
             return
 
-        if e._type == EVENT.KEYDOWN or e._type == EVENT.KEYUP:
-            e.Function(True if e._type == EVENT.KEYUP else False)
+        if e._type == EVENT.KEY:
+            e.Function(cast(KeyEvent, e)._pressed)
         elif e._type == EVENT.FOCUS:
             e.Function(cast(FocusEvent, e)._gain)
 
@@ -119,13 +120,15 @@ class EventProcessor:
                     traceback.format_exc(),
                 )
 
-        try:
-            while f := self._unregistered_events.pop():
-                self._unregister_event(f)
-        except IndexError:
-            pass
+        if len(self._unregistered_events) == 0:
+            return
 
-    def AddKeyDownEvent(
+        for f in self._unregistered_events:
+            self._unregister_event(f)
+
+        self._unregistered_events.clear()
+
+    def AddKeyEvent(
         self,
         function: Callable[[bool], None],
         key: int,
@@ -134,44 +137,21 @@ class EventProcessor:
     ) -> None:
 
         self._registered_events.append(
-            KeyEvent(
-                type=EVENT.KEYDOWN, function=function, key=key, mod=mod, repeat=repeat
-            )
-        )
-
-    def AddKeyUpEvent(
-        self, function: Callable[[bool], None], key: int, mod: int = 0
-    ) -> None:
-
-        self._registered_events.append(
-            KeyEvent(type=EVENT.KEYUP, key=key, mod=mod, function=function)
+            KeyEvent(function=function, key=key, mod=mod, repeat=repeat)
         )
 
     def AddFocusEvent(self, function: Callable[[bool], None]) -> None:
 
         self._registered_events.append(FocusEvent(function))
 
-    def DelKeyDownEvent(self, key: int, mod: int = 0) -> None:
+    def DelKeyEvent(self, key: int, mod: int = 0) -> None:
 
         f: Event
 
         for f in self._registered_events:
             if (
                 f not in self._unregistered_events
-                and f._type == EVENT.KEYDOWN
-                and cast(KeyEvent, f)._key == key
-                and cast(KeyEvent, f)._mod == mod
-            ):
-                self._unregistered_events.append(f)
-
-    def DelKeyUpEvent(self, key: int, mod: int = 0) -> None:
-
-        f: Event
-
-        for f in self._registered_events:
-            if (
-                f not in self._unregistered_events
-                and f._type == EVENT.KEYUP
+                and f._type == EVENT.KEY
                 and cast(KeyEvent, f)._key == key
                 and cast(KeyEvent, f)._mod == mod
             ):
@@ -194,8 +174,7 @@ class EventProcessor:
         events: List[Event] = [
             f
             for f in self._registered_events
-            if f not in self._unregistered_events
-            and (f._type == EVENT.KEYDOWN or f._type == EVENT.KEYUP)
+            if f not in self._unregistered_events and (f._type == EVENT.KEY)
         ]
 
         self._unregistered_events = self._unregistered_events + events
