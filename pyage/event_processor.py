@@ -1,5 +1,8 @@
+import copy
+import heapq
+import time
 import traceback
-from typing import Any, Callable, List, cast
+from typing import Callable, List, Optional, Tuple, cast
 
 import pygame
 
@@ -11,45 +14,41 @@ from pyage.events.key import KeyEvent
 
 class EventProcessor:
 
+    _event_queue: List[Tuple[float, Event]] = []
     _registered_events: List[Event] = []
     _unregistered_events: List[Event] = []
 
-    def _process(self, e: Any) -> None:
+    def _process_pygame_event(self, e: pygame.event.EventType) -> None:
 
-        f: Event
+        f: Optional[Event]
+        r_f: Event
 
         if e.type == pygame.KEYDOWN or e.type == pygame.KEYUP:
-
-            events: List[KeyEvent] = []
 
             f_type: int = EVENT.KEYDOWN
 
             if e.type == pygame.KEYUP:
                 f_type = EVENT.KEYUP
 
-            for f in self._registered_events:
-                if (
-                    f.Type == f_type
-                    and cast(KeyEvent, f).Key == e.key
-                    and e.mod & cast(KeyEvent, f).Mod == cast(KeyEvent, f).Mod
-                ):
-                    if cast(KeyEvent, f).Mod != 0:
-                        events = [cast(KeyEvent, f)] + events
-                    else:
-                        events.append(cast(KeyEvent, f))
-
-            if len(events) > 0:
-                events[0].Function(
-                    KeyUp=(False if events[0].Type == EVENT.KEYDOWN else True)
+            try:
+                f = next(
+                    r_f
+                    for r_f in self._registered_events
+                    if r_f._type == f_type
+                    and cast(KeyEvent, r_f)._key == e.key
+                    and e.mod & cast(KeyEvent, r_f)._mod == cast(KeyEvent, r_f)._mod
                 )
+            except StopIteration:
+                f = None
 
-            """
-        if events[0].Repeat > 0:
-          EventSpawner.SpawnerListLock.acquire()
-          if len(EventSpawner.SpawnerList)==0:
-            EventSpawner(PossibleStack[0]['key'],PossibleStack[0]['mod'],PossibleStack[0]['repeat']).start()
-          EventSpawner.SpawnerListLock.release()
-      """
+            if f:
+                heapq.heappush(
+                    self._event_queue,
+                    (
+                        time.time(),
+                        f,
+                    ),
+                )
 
         elif e.type == pygame.ACTIVEEVENT:
 
@@ -57,10 +56,43 @@ class EventProcessor:
                 return
 
             for f in self._registered_events:
-                if f.Type == EVENT.FOCUS:
-                    f.Function(bool(e.gain))
+
+                if f._type == EVENT.FOCUS:
+
+                    r_f = copy.copy(f)
+                    cast(FocusEvent, r_f)._gain = bool(e.gain)
+
+                    heapq.heappush(
+                        self._event_queue,
+                        (
+                            time.time(),
+                            r_f,
+                        ),
+                    )
+
+    def _process_event(self, e: Event) -> None:
+
+        if e in self._unregistered_events:
+            return
+
+        if e._type == EVENT.KEYDOWN or e._type == EVENT.KEYUP:
+            e.Function(True if e._type == EVENT.KEYUP else False)
+        elif e._type == EVENT.FOCUS:
+            e.Function(cast(FocusEvent, e)._gain)
+
+    def _unregister_event(self, e: Event) -> None:
+
+        try:
+            self._registered_events.remove(e)
+        except ValueError:
+            pass
 
     def Process(self) -> None:
+
+        e: pygame.event.EventType
+        f: Event
+        events: List[pygame.event.EventType]
+
         try:
             events = pygame.event.get()
         except pygame.error:
@@ -68,16 +100,37 @@ class EventProcessor:
 
         for e in events:
             if e.type != pygame.NOEVENT:
-                try:
-                    self._process(e)
-                except BaseException:
-                    print(
-                        "exception encountered and silently ignored:\n",
-                        traceback.format_exc(),
-                    )
+                self._process_pygame_event(e)
+
+        if len(self._event_queue) == 0:
+            return
+
+        current_time: float = time.time()
+
+        while len(self._event_queue) > 0 and self._event_queue[0][0] <= current_time:
+
+            f = heapq.heappop(self._event_queue)[1]
+
+            try:
+                self._process_event(f)
+            except BaseException:
+                print(
+                    "exception encountered and silently ignored:\n",
+                    traceback.format_exc(),
+                )
+
+        try:
+            while f := self._unregistered_events.pop():
+                self._unregister_event(f)
+        except IndexError:
+            pass
 
     def AddKeyDownEvent(
-        self, function: Callable[[bool], None], key: int, mod: int = 0, repeat: int = 0
+        self,
+        function: Callable[[bool], None],
+        key: int,
+        mod: int = 0,
+        repeat: float = 0.0,
     ) -> None:
 
         self._registered_events.append(
@@ -105,9 +158,9 @@ class EventProcessor:
         for f in self._registered_events:
             if (
                 f not in self._unregistered_events
-                and f.Type == EVENT.KEYDOWN
-                and cast(KeyEvent, f).Key == key
-                and cast(KeyEvent, f).Mod == mod
+                and f._type == EVENT.KEYDOWN
+                and cast(KeyEvent, f)._key == key
+                and cast(KeyEvent, f)._mod == mod
             ):
                 self._unregistered_events.append(f)
 
@@ -118,9 +171,9 @@ class EventProcessor:
         for f in self._registered_events:
             if (
                 f not in self._unregistered_events
-                and f.Type == EVENT.KEYUP
-                and cast(KeyEvent, f).Key == key
-                and cast(KeyEvent, f).Mod == mod
+                and f._type == EVENT.KEYUP
+                and cast(KeyEvent, f)._key == key
+                and cast(KeyEvent, f)._mod == mod
             ):
                 self._unregistered_events.append(f)
 
@@ -131,8 +184,8 @@ class EventProcessor:
         for f in self._registered_events:
             if (
                 f not in self._unregistered_events
-                and f.Type == EVENT.FOCUS
-                and f.Function == function
+                and f._type == EVENT.FOCUS
+                and f._function == function
             ):
                 self._unregistered_events.append(f)
 
@@ -142,7 +195,7 @@ class EventProcessor:
             f
             for f in self._registered_events
             if f not in self._unregistered_events
-            and (f.Type == EVENT.KEYDOWN or f.Type == EVENT.KEYUP)
+            and (f._type == EVENT.KEYDOWN or f._type == EVENT.KEYUP)
         ]
 
         self._unregistered_events = self._unregistered_events + events

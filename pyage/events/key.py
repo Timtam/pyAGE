@@ -7,7 +7,7 @@ class KeyEvent(Event):
 
     _key: int
     _mod: int
-    _repeat: int
+    _repeat: float
 
     def __init__(
         self,
@@ -15,7 +15,7 @@ class KeyEvent(Event):
         function: Callable[[bool], None],
         key: int,
         mod: int,
-        repeat: int = 0,
+        repeat: float = 0.0,
     ) -> None:
 
         Event.__init__(self, type=type, function=function)
@@ -24,11 +24,10 @@ class KeyEvent(Event):
 
         if isinstance(other, KeyEvent):
             return (
-                self.Type == other.Type
-                and self.Key == other.Key
-                and self.Mod == other.Mod
-                and self.Function == other.Function
-                and self.Repeat == other.Repeat
+                self._type == other._type
+                and self._key == other._key
+                and self._mod == other._mod
+                and self._function == other._function
             )
 
         return False
@@ -42,5 +41,5 @@ class KeyEvent(Event):
         return self._mod
 
     @property
-    def Repeat(self) -> int:
+    def Repeat(self) -> float:
         return self._repeat
