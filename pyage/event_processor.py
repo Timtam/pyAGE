@@ -73,11 +73,41 @@ class EventProcessor:
 
     def _process_event(self, e: Event) -> None:
 
+        keys: Tuple[int]
+
         if e in self._unregistered_events:
             return
 
         if e._type == EVENT.KEY:
+
+            if cast(KeyEvent, e)._pressed and cast(KeyEvent, e)._repeat > 0:
+
+                keys = pygame.key.get_pressed()
+
+                if (
+                    cast(KeyEvent, e)._mod == 0
+                    and not bool(keys[cast(KeyEvent, e)._key])
+                ) or (
+                    cast(KeyEvent, e)._mod != 0
+                    and (
+                        pygame.key.get_mods() & cast(KeyEvent, e)._mod
+                        != cast(KeyEvent, e)._mod
+                        or not bool(keys[cast(KeyEvent, e)._key])
+                    )
+                ):
+                    return
+
             e.Function(cast(KeyEvent, e)._pressed)
+
+            if cast(KeyEvent, e)._repeat > 0 and cast(KeyEvent, e)._pressed:
+                heapq.heappush(
+                    self._event_queue,
+                    (
+                        time.time() + cast(KeyEvent, e)._repeat,
+                        e,
+                    ),
+                )
+
         elif e._type == EVENT.FOCUS:
             e.Function(cast(FocusEvent, e)._gain)
 
