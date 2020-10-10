@@ -1,5 +1,4 @@
 import sys
-import time
 import traceback
 from typing import Callable, Optional, cast
 
@@ -55,39 +54,27 @@ class App:
 
     def Process(self, fn: Optional[Callable[["App", float], None]] = None) -> None:
 
-        current_time: float
-        frame_length: float = 1.0 / self._fps
-        frame_time: float = time.time()
-        previous_frame: float
-        time_diff: float
+        clock: pygame.time.Clock = pygame.time.Clock()
 
         while not self._quit:
 
-            previous_frame = frame_time
-
-            frame_time = time.time()
-
             try:
+
+                clock.tick(self._fps)
+
                 self._event_processor.Process()
 
                 if self._quit:
                     break
 
-                self._screen_stack.Update(frame_time - previous_frame)
+                self._screen_stack.Update(clock.get_time() / 1000)
 
                 if fn:
-                    fn(self, frame_time - previous_frame)
-
-                current_time = time.time()
-
-                time_diff = current_time - frame_time
-
-                if time_diff < frame_length:
-                    time.sleep(frame_length - time_diff)
+                    fn(self, clock.get_time() / 1000)
 
             except KeyboardInterrupt:
 
-                self._quit = True
+                self.Quit()
 
             except BaseException:
                 print(
