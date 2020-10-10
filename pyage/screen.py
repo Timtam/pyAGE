@@ -1,26 +1,56 @@
 from abc import ABC
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Callable, List, Optional, cast
+
+from .events.key import KeyEvent
 
 if TYPE_CHECKING:
-    from pyage.app import App  # noqa: F401
+    from pyage.app import App
 
 
 class Screen(ABC):
 
     _app: Optional["App"] = None
+    _keys: List[KeyEvent]
+
+    def __init__(self) -> None:
+
+        self._keys = []
 
     def _create(self, app: "App") -> None:
         self._app = app
 
+    def AddKeyEvent(
+        self,
+        key: int,
+        function: Callable[[bool], None],
+        mod: int = 0,
+        repeat: float = 0.0,
+    ) -> None:
+
+        e: KeyEvent = KeyEvent(key=key, function=function, mod=mod, repeat=repeat)
+
+        if e not in self._keys:
+            self._keys.append(e)
+
     @property
-    def App(self) -> Optional["App"]:  # noqa: F811
+    def App(self) -> Optional["App"]:
         return self._app
 
     def Shown(self, pushed: bool) -> None:
-        pass
+
+        e: KeyEvent
+
+        for e in self._keys:
+            cast(App, self._app)._event_processor.AddKeyEvent(
+                key=e._key, function=e._function, mod=e._mod, repeat=e._repeat
+            )
 
     def Hidden(self, popped: bool) -> None:
-        pass
+
+        e: KeyEvent
+
+        for e in self._keys:
+            cast(App, self._app)._event_processor.DelKeyEvent(key=e._key, mod=e._mod)
 
     def Update(self, dt: float) -> None:
         pass
