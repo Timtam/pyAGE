@@ -4,6 +4,7 @@ from typing import Callable, Optional, cast
 
 import pygame
 
+from .audio_backend import AudioBackend
 from .event_processor import EventProcessor
 from .output_backend import OutputBackend
 from .screen_stack import ScreenStack
@@ -11,6 +12,7 @@ from .screen_stack import ScreenStack
 
 class App:
 
+    _audio_backend: Optional[AudioBackend] = None
     _event_processor: EventProcessor
     _fps: int
     _output_backend: Optional[OutputBackend] = None
@@ -24,7 +26,11 @@ class App:
         self._screen_stack = ScreenStack(self)
 
     def Show(
-        self, title: str, fps: int = 30, output_backend: Optional[OutputBackend] = None
+        self,
+        title: str,
+        fps: int = 30,
+        audio_backend: Optional[AudioBackend] = None,
+        output_backend: Optional[OutputBackend] = None,
     ) -> None:
 
         self._fps = fps
@@ -38,6 +44,15 @@ class App:
             self._output_backend = output_backend
 
         cast(OutputBackend, self._output_backend).Load()
+
+        if audio_backend is None:
+            from pyage.audio_backends.synthizer import Synthizer
+
+            self._audio_backend = Synthizer()
+        else:
+            self._audio_backend = audio_backend
+
+        cast(AudioBackend, self._audio_backend).Load()
 
         try:
             pygame.display.init()
@@ -83,6 +98,7 @@ class App:
                 )
 
         pygame.display.quit()
+        cast(AudioBackend, self._audio_backend).Unload()
         cast(OutputBackend, self._output_backend).Unload()
 
     @property
@@ -119,3 +135,7 @@ class App:
     @property
     def ScreenStack(self) -> ScreenStack:
         return self._screen_stack
+
+    @property
+    def AudioBackend(self) -> Optional[AudioBackend]:
+        return self._audio_backend
