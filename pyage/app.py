@@ -7,6 +7,7 @@ import pygame
 
 from .event_processor import EventProcessor
 from .output_backend import OutputBackend
+from .screen_stack import ScreenStack
 
 
 class App:
@@ -15,11 +16,13 @@ class App:
     _fps: int
     _output_backend: Optional[OutputBackend] = None
     _quit: bool = False
+    _screen_stack: ScreenStack
     _title: str = ""
 
     def __init__(self) -> None:
 
         self._event_processor = EventProcessor()
+        self._screen_stack = ScreenStack(self)
 
     def Show(
         self, title: str, fps: int = 30, output_backend: Optional[OutputBackend] = None
@@ -123,3 +126,7 @@ class App:
     @property
     def OutputBackend(self) -> Optional[OutputBackend]:
         return self._output_backend
+
+    @property
+    def ScreenStack(self) -> ScreenStack:
+        return self._screen_stack
