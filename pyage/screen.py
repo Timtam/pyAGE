@@ -1,10 +1,11 @@
+from abc import ABC
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from pyage.app import App  # noqa: F401
 
 
-class Screen:
+class Screen(ABC):
 
     _app: Optional["App"] = None
 
@@ -19,4 +20,7 @@ class Screen:
         pass
 
     def Hidden(self, popped: bool) -> None:
+        pass
+
+    def Update(self, dt: float) -> None:
         pass

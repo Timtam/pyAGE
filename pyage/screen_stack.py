@@ -40,3 +40,8 @@ class ScreenStack:
                 self._screen_stack[-1].Shown(False)
             else:
                 self._app.Quit()
+
+    def Update(self, dt: float) -> None:
+
+        if len(self._screen_stack) > 0:
+            self._screen_stack[-1].Update(dt)

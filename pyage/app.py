@@ -73,6 +73,8 @@ class App:
                 if self._quit:
                     break
 
+                self._screen_stack.Update(frame_time - previous_frame)
+
                 if fn:
                     fn(self, frame_time - previous_frame)
 
