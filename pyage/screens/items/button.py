@@ -32,5 +32,4 @@ class Button(MenuItem):
         if not pressed:
             return
 
-        if self._function:
-            self._function()
+        self._function()
