@@ -10,13 +10,15 @@ class Menu(Screen):
 
     _item_index: int
     _items: List[MenuItem]
+    _wrap: bool
 
-    def __init__(self) -> None:
+    def __init__(self, wrap: bool = False) -> None:
 
         super().__init__()
 
         self._item_index = 0
         self._items = []
+        self._wrap = wrap
 
         self.AddKeyEvent(key=pygame.K_UP, function=self.SelectPreviousItem)
         self.AddKeyEvent(key=pygame.K_DOWN, function=self.SelectNextItem)
@@ -32,10 +34,13 @@ class Menu(Screen):
         if not pressed:
             return
 
-        if self._item_index == 0:
+        if self._item_index == 0 and not self._wrap:
             return
 
         self._item_index -= 1
+
+        if self._item_index < 0:
+            self._item_index = len(self._items) - 1
 
         self._items[self._item_index].Selected()
 
@@ -44,9 +49,12 @@ class Menu(Screen):
         if not pressed:
             return
 
-        if len(self._items) <= self._item_index + 1:
+        if len(self._items) <= self._item_index + 1 and not self._wrap:
             return
 
         self._item_index += 1
+
+        if self._item_index >= len(self._items):
+            self._item_index = 0
 
         self._items[self._item_index].Selected()
