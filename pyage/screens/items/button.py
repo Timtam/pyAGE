@@ -1,7 +1,6 @@
 from typing import Any, Callable
 
-import pygame
-
+from pyage.constants import KEY
 from pyage.output import Output
 
 from .menu_item import MenuItem
@@ -19,7 +18,7 @@ class Button(MenuItem):
         self._function = function
         self._text = text
 
-        self.AddKeyEvent(key=pygame.K_RETURN, function=self.Submit)
+        self.AddKeyEvent(key=KEY.RETURN, function=self.Submit)
 
     def Selected(self) -> None:
 

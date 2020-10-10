@@ -6,7 +6,7 @@ from typing import Callable, List, Optional, Tuple, cast
 
 import pygame
 
-from pyage.constants import EVENT
+from pyage.constants import EVENT, KEY, MOD
 from pyage.event import Event
 from pyage.events.focus import FocusEvent
 from pyage.events.key import KeyEvent
@@ -161,8 +161,8 @@ class EventProcessor:
     def AddKeyEvent(
         self,
         function: Callable[[bool], None],
-        key: int,
-        mod: int = 0,
+        key: KEY,
+        mod: MOD = MOD.NONE,
         repeat: float = 0.0,
     ) -> None:
 

@@ -1,6 +1,7 @@
 from abc import ABC
 from typing import TYPE_CHECKING, Callable, List, Optional, cast
 
+from pyage.constants import KEY, MOD
 from pyage.events.key import KeyEvent
 
 if TYPE_CHECKING:
@@ -23,9 +24,9 @@ class MenuItem(ABC):
 
     def AddKeyEvent(
         self,
-        key: int,
+        key: KEY,
         function: Callable[[bool], None],
-        mod: int = 0,
+        mod: MOD = MOD.NONE,
         repeat: float = 0.0,
     ) -> None:
 

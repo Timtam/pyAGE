@@ -1,7 +1,6 @@
 from typing import List
 
-import pygame
-
+from pyage.constants import KEY
 from pyage.screen import Screen
 from pyage.screens.items.menu_item import MenuItem
 
@@ -20,8 +19,8 @@ class Menu(Screen):
         self._items = []
         self._wrap = wrap
 
-        self.AddKeyEvent(key=pygame.K_UP, function=self.SelectPreviousItem)
-        self.AddKeyEvent(key=pygame.K_DOWN, function=self.SelectNextItem)
+        self.AddKeyEvent(key=KEY.UP, function=self.SelectPreviousItem)
+        self.AddKeyEvent(key=KEY.DOWN, function=self.SelectNextItem)
 
     def Shown(self, pushed: bool) -> None:
 

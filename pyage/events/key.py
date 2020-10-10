@@ -1,21 +1,21 @@
 from typing import Any, Callable
 
-from pyage.constants import EVENT
+from pyage.constants import EVENT, KEY, MOD
 from pyage.event import Event
 
 
 class KeyEvent(Event):
 
-    _key: int
-    _mod: int
+    _key: KEY
+    _mod: MOD
     _pressed: bool
     _repeat: float
 
     def __init__(
         self,
         function: Callable[[bool], None],
-        key: int,
-        mod: int,
+        key: KEY,
+        mod: MOD,
         repeat: float = 0.0,
         pressed: bool = True,
     ) -> None:
@@ -39,11 +39,11 @@ class KeyEvent(Event):
         return False
 
     @property
-    def Key(self) -> int:
+    def Key(self) -> KEY:
         return self._key
 
     @property
-    def Mod(self) -> int:
+    def Mod(self) -> MOD:
         return self._mod
 
     @property
