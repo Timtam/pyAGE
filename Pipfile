@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 cytolk = "*"
 synthizer = "*"
-pygame = "*"
+pygame = "==2.0.0-dev12"
 
 [dev-packages]
 black = "*"
@@ -17,3 +17,6 @@ pre-commit = "*"
 
 [requires]
 python_version = "3.8"
+
+[pipenv]
+allow_prereleases = true

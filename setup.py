@@ -12,7 +12,7 @@ setup(
     ],
     install_requires=[
         "cytolk==0.1.3",
-        "pygame==1.9.6",
+        "pygame==2.0.0-dev12",
         "synthizer==0.7.3",
     ],
 )

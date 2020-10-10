@@ -1,0 +1,3 @@
+cytolk==0.1.3
+pygame==2.0.0-dev12
+synthizer==0.7.3
