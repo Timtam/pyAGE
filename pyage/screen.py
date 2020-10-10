@@ -41,7 +41,7 @@ class Screen(ABC):
         e: KeyEvent
 
         for e in self._keys:
-            cast(App, self._app)._event_processor.AddKeyEvent(
+            cast("App", self._app)._event_processor.AddKeyEvent(
                 key=e._key, function=e._function, mod=e._mod, repeat=e._repeat
             )
 
