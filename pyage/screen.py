@@ -50,7 +50,7 @@ class Screen(ABC):
         e: KeyEvent
 
         for e in self._keys:
-            cast(App, self._app)._event_processor.DelKeyEvent(key=e._key, mod=e._mod)
+            cast("App", self._app)._event_processor.DelKeyEvent(key=e._key, mod=e._mod)
 
     def Update(self, dt: float) -> None:
         pass

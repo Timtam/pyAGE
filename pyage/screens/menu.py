@@ -23,6 +23,24 @@ class Menu(Screen):
         self.AddKeyEvent(key=pygame.K_UP, function=self.SelectPreviousItem)
         self.AddKeyEvent(key=pygame.K_DOWN, function=self.SelectNextItem)
 
+    def Shown(self, pushed: bool) -> None:
+
+        super().Shown(pushed)
+
+        try:
+            self._items[self._item_index].Selected()
+        except IndexError:
+            pass
+
+    def Hidden(self, popped: bool) -> None:
+
+        super().Hidden(popped)
+
+        try:
+            self._items[self._item_index].Deselected()
+        except IndexError:
+            pass
+
     def AddItem(self, item: MenuItem) -> None:
 
         item._create(self)
@@ -36,6 +54,8 @@ class Menu(Screen):
 
         if self._item_index == 0 and not self._wrap:
             return
+
+        self._items[self._item_index].Deselected()
 
         self._item_index -= 1
 
@@ -51,6 +71,8 @@ class Menu(Screen):
 
         if len(self._items) <= self._item_index + 1 and not self._wrap:
             return
+
+        self._items[self._item_index].Deselected()
 
         self._item_index += 1
 
