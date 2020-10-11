@@ -127,7 +127,7 @@ class EventProcessor:
         try:
             events = pygame.event.get()
         except pygame.error:
-            return
+            events = []
 
         for e in events:
             if e.type != pygame.NOEVENT:
