@@ -97,6 +97,9 @@ class App:
                     traceback.format_exc(),
                 )
 
+        while self._screen_stack.Pop():
+            pass
+
         pygame.display.quit()
         cast(AudioBackend, self._audio_backend).Unload()
         cast(OutputBackend, self._output_backend).Unload()

@@ -26,7 +26,7 @@ class ScreenStack:
 
         screen.Shown(True)
 
-    def Pop(self) -> None:
+    def Pop(self) -> bool:
 
         screen: Screen
 
@@ -38,8 +38,10 @@ class ScreenStack:
 
             if len(self._screen_stack) > 0:
                 self._screen_stack[-1].Shown(False)
-            else:
-                self._app.Quit()
+
+            return True
+
+        return False
 
     def Update(self, dt: float) -> None:
 
