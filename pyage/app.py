@@ -8,6 +8,7 @@ from .audio_backend import AudioBackend
 from .event_processor import EventProcessor
 from .output_backend import OutputBackend
 from .screen_stack import ScreenStack
+from .sound_bank import SoundBank
 
 
 class App:
@@ -18,12 +19,14 @@ class App:
     _output_backend: Optional[OutputBackend] = None
     _quit: bool = False
     _screen_stack: ScreenStack
+    _sound_bank: SoundBank
     _title: str = ""
 
     def __init__(self) -> None:
 
         self._event_processor = EventProcessor()
         self._screen_stack = ScreenStack(self)
+        self._sound_bank = SoundBank(self)
 
     def show(
         self,
@@ -142,3 +145,7 @@ class App:
     @property
     def audio_backend(self) -> Optional[AudioBackend]:
         return self._audio_backend
+
+    @property
+    def sound_bank(self) -> SoundBank:
+        return self._sound_bank

@@ -1,11 +1,15 @@
 from abc import ABC, abstractmethod
 
+from pyage.sound_buffer import SoundBuffer
+
 
 class AudioBackend(ABC):
-    @abstractmethod
     def load(self) -> None:
         pass
 
-    @abstractmethod
     def unload(self) -> None:
+        pass
+
+    @abstractmethod
+    def create_sound_buffer(self, src: str) -> SoundBuffer:
         pass
