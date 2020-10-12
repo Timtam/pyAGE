@@ -19,34 +19,34 @@ class Menu(Screen):
         self._items = []
         self._wrap = wrap
 
-        self.AddKeyEvent(key=KEY.UP, function=self.SelectPreviousItem)
-        self.AddKeyEvent(key=KEY.DOWN, function=self.SelectNextItem)
+        self.add_key_event(key=KEY.UP, function=self.select_previous_item)
+        self.add_key_event(key=KEY.DOWN, function=self.select_next_item)
 
-    def Shown(self, pushed: bool) -> None:
+    def shown(self, pushed: bool) -> None:
 
-        super().Shown(pushed)
+        super().shown(pushed)
 
         try:
-            self._items[self._item_index].Selected()
+            self._items[self._item_index].selected()
         except IndexError:
             pass
 
-    def Hidden(self, popped: bool) -> None:
+    def hidden(self, popped: bool) -> None:
 
-        super().Hidden(popped)
+        super().hidden(popped)
 
         try:
-            self._items[self._item_index].Deselected()
+            self._items[self._item_index].deselected()
         except IndexError:
             pass
 
-    def AddItem(self, item: MenuItem) -> None:
+    def add_item(self, item: MenuItem) -> None:
 
         item._create(self)
 
         self._items.append(item)
 
-    def SelectPreviousItem(self, pressed: bool) -> None:
+    def select_previous_item(self, pressed: bool) -> None:
 
         if not pressed:
             return
@@ -54,16 +54,16 @@ class Menu(Screen):
         if self._item_index == 0 and not self._wrap:
             return
 
-        self._items[self._item_index].Deselected()
+        self._items[self._item_index].deselected()
 
         self._item_index -= 1
 
         if self._item_index < 0:
             self._item_index = len(self._items) - 1
 
-        self._items[self._item_index].Selected()
+        self._items[self._item_index].selected()
 
-    def SelectNextItem(self, pressed: bool) -> None:
+    def select_next_item(self, pressed: bool) -> None:
 
         if not pressed:
             return
@@ -71,11 +71,11 @@ class Menu(Screen):
         if len(self._items) <= self._item_index + 1 and not self._wrap:
             return
 
-        self._items[self._item_index].Deselected()
+        self._items[self._item_index].deselected()
 
         self._item_index += 1
 
         if self._item_index >= len(self._items):
             self._item_index = 0
 
-        self._items[self._item_index].Selected()
+        self._items[self._item_index].selected()

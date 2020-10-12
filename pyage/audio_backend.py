@@ -3,9 +3,9 @@ from abc import ABC, abstractmethod
 
 class AudioBackend(ABC):
     @abstractmethod
-    def Load(self) -> None:
+    def load(self) -> None:
         pass
 
     @abstractmethod
-    def Unload(self) -> None:
+    def unload(self) -> None:
         pass

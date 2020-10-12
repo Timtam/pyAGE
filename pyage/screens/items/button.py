@@ -1,7 +1,7 @@
 from typing import Any, Callable
 
 from pyage.constants import KEY
-from pyage.output import Output
+from pyage.output import output
 
 from .menu_item import MenuItem
 
@@ -18,15 +18,15 @@ class Button(MenuItem):
         self._function = function
         self._text = text
 
-        self.AddKeyEvent(key=KEY.RETURN, function=self.Submit)
+        self.add_key_event(key=KEY.RETURN, function=self.submit)
 
-    def Selected(self) -> None:
+    def selected(self) -> None:
 
-        super().Selected()
+        super().selected()
 
-        Output(self._text, True)
+        output(self._text, True)
 
-    def Submit(self, pressed: bool) -> None:
+    def submit(self, pressed: bool) -> None:
 
         if not pressed:
             return

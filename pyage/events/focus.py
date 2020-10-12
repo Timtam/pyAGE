@@ -15,5 +15,5 @@ class FocusEvent(Event):
         self._gain = gain
 
     @property
-    def Gain(self) -> bool:
+    def gain(self) -> bool:
         return self._gain

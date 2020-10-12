@@ -25,7 +25,7 @@ class App:
         self._event_processor = EventProcessor()
         self._screen_stack = ScreenStack(self)
 
-    def Show(
+    def show(
         self,
         title: str,
         fps: int = 30,
@@ -43,7 +43,7 @@ class App:
         else:
             self._output_backend = output_backend
 
-        cast(OutputBackend, self._output_backend).Load()
+        cast(OutputBackend, self._output_backend).load()
 
         if audio_backend is None:
             from pyage.audio_backends.synthizer import Synthizer
@@ -52,22 +52,22 @@ class App:
         else:
             self._audio_backend = audio_backend
 
-        cast(AudioBackend, self._audio_backend).Load()
+        cast(AudioBackend, self._audio_backend).load()
 
         try:
             pygame.display.init()
         except pygame.error as e:
-            self.MessageBox(e)
+            self.show_message_box(e)
             sys.exit()
 
         pygame.display.set_mode((320, 240))
-        pygame.display.set_caption(self.WindowTitle)
+        pygame.display.set_caption(self.window_title)
         pygame.display.flip()
 
-    def Quit(self) -> None:
+    def quit(self) -> None:
         self._quit = True
 
-    def Process(self, fn: Optional[Callable[["App", float], None]] = None) -> None:
+    def process(self, fn: Optional[Callable[["App", float], None]] = None) -> None:
 
         clock: pygame.time.Clock = pygame.time.Clock()
 
@@ -77,19 +77,19 @@ class App:
 
                 clock.tick(self._fps)
 
-                self._event_processor.Process()
+                self._event_processor.process()
 
                 if self._quit:
                     break
 
-                self._screen_stack.Update(clock.get_time() / 1000)
+                self._screen_stack.update(clock.get_time() / 1000)
 
                 if fn:
                     fn(self, clock.get_time() / 1000)
 
             except KeyboardInterrupt:
 
-                self.Quit()
+                self.quit()
 
             except BaseException:
                 print(
@@ -97,25 +97,25 @@ class App:
                     traceback.format_exc(),
                 )
 
-        while self._screen_stack.Pop():
+        while self._screen_stack.pop():
             pass
 
         pygame.display.quit()
-        cast(AudioBackend, self._audio_backend).Unload()
-        cast(OutputBackend, self._output_backend).Unload()
+        cast(AudioBackend, self._audio_backend).unload()
+        cast(OutputBackend, self._output_backend).unload()
 
     @property
-    def WindowTitle(self) -> str:
+    def window_title(self) -> str:
         return self._title
 
     @property
-    def EventProcessor(self) -> EventProcessor:
+    def event_processor(self) -> EventProcessor:
         return self._event_processor
 
-    def MessageBox(self, message: str, title: Optional[str] = None) -> None:
+    def show_message_box(self, message: str, title: Optional[str] = None) -> None:
 
         if not title:
-            title = self.WindowTitle
+            title = self.window_title
 
         import Tkinter
         import tkMessageBox
@@ -132,13 +132,13 @@ class App:
             )
 
     @property
-    def OutputBackend(self) -> Optional[OutputBackend]:
+    def output_backend(self) -> Optional[OutputBackend]:
         return self._output_backend
 
     @property
-    def ScreenStack(self) -> ScreenStack:
+    def screen_stack(self) -> ScreenStack:
         return self._screen_stack
 
     @property
-    def AudioBackend(self) -> Optional[AudioBackend]:
+    def audio_backend(self) -> Optional[AudioBackend]:
         return self._audio_backend

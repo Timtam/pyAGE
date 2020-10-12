@@ -22,7 +22,7 @@ class MenuItem(ABC):
 
         self._menu = menu
 
-    def AddKeyEvent(
+    def add_key_event(
         self,
         key: KEY,
         function: Callable[[bool], None],
@@ -35,24 +35,24 @@ class MenuItem(ABC):
         if e not in self._keys:
             self._keys.append(e)
 
-    def Selected(self) -> None:
+    def selected(self) -> None:
 
         e: KeyEvent
 
         for e in self._keys:
-            cast("App", cast("Menu", self._menu)._app)._event_processor.AddKeyEvent(
+            cast("App", cast("Menu", self._menu)._app)._event_processor.add_key_event(
                 key=e._key, function=e._function, mod=e._mod, repeat=e._repeat
             )
 
-    def Deselected(self) -> None:
+    def deselected(self) -> None:
 
         e: KeyEvent
 
         for e in self._keys:
-            cast("App", cast("Menu", self._menu)._app)._event_processor.DelKeyEvent(
-                key=e._key, mod=e._mod
-            )
+            cast(
+                "App", cast("Menu", self._menu)._app
+            )._event_processor.remove_key_event(key=e._key, mod=e._mod)
 
     @property
-    def Menu(self) -> Optional["Menu"]:
+    def menu(self) -> Optional["Menu"]:
         return self._menu

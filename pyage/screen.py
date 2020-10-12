@@ -20,7 +20,7 @@ class Screen(ABC):
     def _create(self, app: "App") -> None:
         self._app = app
 
-    def AddKeyEvent(
+    def add_key_event(
         self,
         key: KEY,
         function: Callable[[bool], None],
@@ -34,24 +34,26 @@ class Screen(ABC):
             self._keys.append(e)
 
     @property
-    def App(self) -> Optional["App"]:
+    def app(self) -> Optional["App"]:
         return self._app
 
-    def Shown(self, pushed: bool) -> None:
+    def shown(self, pushed: bool) -> None:
 
         e: KeyEvent
 
         for e in self._keys:
-            cast("App", self._app)._event_processor.AddKeyEvent(
+            cast("App", self._app)._event_processor.add_key_event(
                 key=e._key, function=e._function, mod=e._mod, repeat=e._repeat
             )
 
-    def Hidden(self, popped: bool) -> None:
+    def hidden(self, popped: bool) -> None:
 
         e: KeyEvent
 
         for e in self._keys:
-            cast("App", self._app)._event_processor.DelKeyEvent(key=e._key, mod=e._mod)
+            cast("App", self._app)._event_processor.remove_key_event(
+                key=e._key, mod=e._mod
+            )
 
-    def Update(self, dt: float) -> None:
+    def update(self, dt: float) -> None:
         pass

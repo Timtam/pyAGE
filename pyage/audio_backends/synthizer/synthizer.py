@@ -4,10 +4,10 @@ from pyage.audio_backend import AudioBackend
 
 
 class Synthizer(AudioBackend):
-    def Load(self) -> None:
+    def load(self) -> None:
 
         synthizer.initialize()
 
-    def Unload(self) -> None:
+    def unload(self) -> None:
 
         synthizer.shutdown()

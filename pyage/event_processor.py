@@ -97,7 +97,7 @@ class EventProcessor:
                 ):
                     return
 
-            e.Function(cast(KeyEvent, e)._pressed)
+            e._function(cast(KeyEvent, e)._pressed)
 
             if cast(KeyEvent, e)._repeat > 0 and cast(KeyEvent, e)._pressed:
                 heapq.heappush(
@@ -109,7 +109,7 @@ class EventProcessor:
                 )
 
         elif e._type == EVENT.FOCUS:
-            e.Function(cast(FocusEvent, e)._gain)
+            e._function(cast(FocusEvent, e)._gain)
 
     def _unregister_event(self, e: Event) -> None:
 
@@ -118,7 +118,7 @@ class EventProcessor:
         except ValueError:
             pass
 
-    def Process(self) -> None:
+    def process(self) -> None:
 
         e: pygame.event.EventType
         f: Event
@@ -158,7 +158,7 @@ class EventProcessor:
 
         self._unregistered_events.clear()
 
-    def AddKeyEvent(
+    def add_key_event(
         self,
         function: Callable[[bool], None],
         key: KEY,
@@ -170,11 +170,11 @@ class EventProcessor:
             KeyEvent(function=function, key=key, mod=mod, repeat=repeat)
         )
 
-    def AddFocusEvent(self, function: Callable[[bool], None]) -> None:
+    def add_focus_event(self, function: Callable[[bool], None]) -> None:
 
         self._registered_events.append(FocusEvent(function))
 
-    def DelKeyEvent(self, key: int, mod: int = 0) -> None:
+    def remove_key_event(self, key: int, mod: int = 0) -> None:
 
         f: Event
 
@@ -187,7 +187,7 @@ class EventProcessor:
             ):
                 self._unregistered_events.append(f)
 
-    def DelFocusEvent(self, function: Callable[[bool], None]) -> None:
+    def remove_focus_event(self, function: Callable[[bool], None]) -> None:
 
         f: Event
 
@@ -199,7 +199,7 @@ class EventProcessor:
             ):
                 self._unregistered_events.append(f)
 
-    def DelAllKeyEvents(self) -> None:
+    def remove_all_key_events(self) -> None:
 
         events: List[Event] = [
             f

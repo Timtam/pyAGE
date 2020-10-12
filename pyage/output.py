@@ -1,7 +1,7 @@
 from pyage import App
 
 
-def Output(text: str, interrupt: bool = True) -> None:
+def output(text: str, interrupt: bool = True) -> None:
 
-    if App.OutputBackend is not None:
-        App.OutputBackend.Output(text, interrupt)
+    if App.output_backend is not None:
+        App.output_backend.output(text, interrupt)

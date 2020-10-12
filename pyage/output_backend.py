@@ -2,12 +2,12 @@ from abc import ABC, abstractmethod
 
 
 class OutputBackend(ABC):
-    def Load(self) -> None:
+    def load(self) -> None:
         pass
 
-    def Unload(self) -> None:
+    def unload(self) -> None:
         pass
 
     @abstractmethod
-    def Output(self, text: str, interrupt: bool = True) -> None:
+    def output(self, text: str, interrupt: bool = True) -> None:
         pass

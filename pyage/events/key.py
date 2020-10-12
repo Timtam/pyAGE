@@ -39,17 +39,17 @@ class KeyEvent(Event):
         return False
 
     @property
-    def Key(self) -> KEY:
+    def key(self) -> KEY:
         return self._key
 
     @property
-    def Mod(self) -> MOD:
+    def mod(self) -> MOD:
         return self._mod
 
     @property
-    def Repeat(self) -> float:
+    def repeat(self) -> float:
         return self._repeat
 
     @property
-    def Pressed(self) -> bool:
+    def pressed(self) -> bool:
         return self._pressed

@@ -4,11 +4,11 @@ from pyage.output_backend import OutputBackend
 
 
 class Tolk(OutputBackend):
-    def Load(self) -> None:
+    def load(self) -> None:
         tolk.load()
 
-    def Unload(self) -> None:
+    def unload(self) -> None:
         tolk.unload()
 
-    def Output(self, text: str, interrupt: bool = True) -> None:
+    def output(self, text: str, interrupt: bool = True) -> None:
         tolk.output(text, interrupt)

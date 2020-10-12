@@ -15,18 +15,18 @@ class ScreenStack:
 
         self._app = app
 
-    def Push(self, screen: Screen) -> None:
+    def push(self, screen: Screen) -> None:
 
         screen._create(self._app)
 
         if len(self._screen_stack) > 0:
-            self._screen_stack[-1].Hidden(False)
+            self._screen_stack[-1].hidden(False)
 
         self._screen_stack.append(screen)
 
-        screen.Shown(True)
+        screen.shown(True)
 
-    def Pop(self) -> bool:
+    def pop(self) -> bool:
 
         screen: Screen
 
@@ -34,16 +34,16 @@ class ScreenStack:
 
             screen = self._screen_stack.pop()
 
-            screen.Hidden(True)
+            screen.hidden(True)
 
             if len(self._screen_stack) > 0:
-                self._screen_stack[-1].Shown(False)
+                self._screen_stack[-1].shown(False)
 
             return True
 
         return False
 
-    def Update(self, dt: float) -> None:
+    def update(self, dt: float) -> None:
 
         if len(self._screen_stack) > 0:
-            self._screen_stack[-1].Update(dt)
+            self._screen_stack[-1].update(dt)
