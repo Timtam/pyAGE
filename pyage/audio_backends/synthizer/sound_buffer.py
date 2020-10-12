@@ -1,3 +1,5 @@
+from typing import Optional
+
 import synthizer
 
 from pyage.sound_buffer import SoundBuffer
@@ -5,7 +7,7 @@ from pyage.sound_buffer import SoundBuffer
 
 class SynthizerSoundBuffer(SoundBuffer):
 
-    _buffer: synthizer.Buffer
+    _buffer: Optional[synthizer.Buffer] = None
 
     def __init__(self, src: str) -> None:
 
@@ -13,4 +15,5 @@ class SynthizerSoundBuffer(SoundBuffer):
 
     def __del__(self) -> None:
 
-        self._buffer.destroy()
+        if self._buffer:
+            self._buffer.destroy()

@@ -1,6 +1,7 @@
 import synthizer
 
 from pyage.audio_backend import AudioBackend
+from pyage.exceptions import AudioLoadException
 
 from .sound_buffer import SynthizerSoundBuffer
 
@@ -16,4 +17,9 @@ class Synthizer(AudioBackend):
 
     def create_sound_buffer(self, src: str) -> SynthizerSoundBuffer:
 
-        return SynthizerSoundBuffer(src)
+        exc: synthizer.SynthizerError
+
+        try:
+            return SynthizerSoundBuffer(src)
+        except synthizer.SynthizerError as exc:
+            raise AudioLoadException(str(exc))

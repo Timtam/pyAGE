@@ -103,6 +103,7 @@ class App:
         while self._screen_stack.pop():
             pass
 
+        self._sound_bank.unload_all()
         pygame.display.quit()
         cast(AudioBackend, self._audio_backend).unload()
         cast(OutputBackend, self._output_backend).unload()
