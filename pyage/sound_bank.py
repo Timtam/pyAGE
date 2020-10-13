@@ -1,11 +1,13 @@
 import fnmatch
+import random
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING, Dict, Generator, List, Union, cast
+from typing import TYPE_CHECKING, Dict, Generator, List, Optional, Union, cast
 
 from .audio_backend import AudioBackend
-from .exceptions import AudioLoadException
+from .exceptions import AudioLoadError
 from .sound_buffer import SoundBuffer
+from .sound_player import SoundPlayer
 
 if TYPE_CHECKING:
     from pyage.app import App
@@ -73,7 +75,7 @@ class SoundBank:
     def load(self, snd: str) -> int:
 
         buffer: SoundBuffer
-        exc: AudioLoadException
+        exc: AudioLoadError
         p: Path
         loaded: int = 0
 
@@ -96,7 +98,7 @@ class SoundBank:
 
                 loaded += 1
 
-            except AudioLoadException as exc:
+            except AudioLoadError as exc:
                 warnings.warn(
                     f"unable to load audio file '{str(p.resolve())}': {str(exc)}"
                 )
@@ -120,3 +122,36 @@ class SoundBank:
     def unload_all(self) -> None:
 
         self._buffers.clear()
+
+    def create_sound_player(self) -> SoundPlayer:
+
+        player: SoundPlayer = cast(
+            AudioBackend, self._app._audio_backend
+        ).get_sound_player()(self._app)
+
+        player.load()
+
+        return player
+
+    def get(self, snd: str) -> Optional[SoundBuffer]:
+
+        if snd in self:
+
+            name: str = str(
+                (self._source_path / (snd + self._file_extension)).resolve()
+            )
+
+            found: List[str] = fnmatch.filter(self._buffers.keys(), name)
+
+            return self._buffers[random.choice(found)]
+
+        return None
+
+    def __getitem__(self, snd: str) -> SoundBuffer:
+
+        buffer: Optional[SoundBuffer] = self.get(snd)
+
+        if buffer is None:
+            raise KeyError(snd)
+
+        return cast(SoundBuffer, buffer)

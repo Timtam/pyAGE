@@ -1,2 +1,2 @@
-class AudioLoadException(Exception):
+class AudioLoadError(Exception):
     pass
