@@ -1,6 +1,6 @@
 import sys
 import traceback
-from typing import Callable, Optional, cast
+from typing import Callable, Optional
 
 import pygame
 
@@ -46,16 +46,12 @@ class App:
         else:
             self._output_backend = output_backend
 
-        cast(OutputBackend, self._output_backend).load()
-
         if audio_backend is None:
             from pyage.audio_backends.synthizer import Synthizer
 
             self._audio_backend = Synthizer()
         else:
             self._audio_backend = audio_backend
-
-        cast(AudioBackend, self._audio_backend).load()
 
         try:
             pygame.display.init()
@@ -105,8 +101,6 @@ class App:
 
         self._sound_bank.unload_all()
         pygame.display.quit()
-        cast(AudioBackend, self._audio_backend).unload()
-        cast(OutputBackend, self._output_backend).unload()
 
     @property
     def window_title(self) -> str:

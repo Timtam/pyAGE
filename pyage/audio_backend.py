@@ -7,12 +7,6 @@ from .sound_player import SoundPlayer
 
 
 class AudioBackend(ABC):
-    def load(self) -> None:
-        pass
-
-    def unload(self) -> None:
-        pass
-
     @abstractmethod
     def create_sound_buffer(self, src: str) -> SoundBuffer:
         pass

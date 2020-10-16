@@ -13,11 +13,11 @@ from .sound_player import SynthizerSoundPlayer
 
 
 class Synthizer(AudioBackend):
-    def load(self) -> None:
+    def __init__(self) -> None:
 
         synthizer.initialize()
 
-    def unload(self) -> None:
+    def __del__(self) -> None:
 
         synthizer.shutdown()
 
