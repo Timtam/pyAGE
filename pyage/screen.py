@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Callable, List, Optional, cast
 
 from .constants import KEY, MOD
 from .events.key import KeyEvent
+from .sound_player import SoundPlayer
 
 if TYPE_CHECKING:
     from pyage.app import App
@@ -12,13 +13,17 @@ class Screen(ABC):
 
     _app: Optional["App"] = None
     _keys: List[KeyEvent]
+    _sound_player: Optional[SoundPlayer] = None
 
     def __init__(self) -> None:
 
         self._keys = []
 
     def _create(self, app: "App") -> None:
+
         self._app = app
+
+        self._sound_player = cast("App", self._app).sound_bank.create_sound_player()
 
     def add_key_event(
         self,
@@ -57,3 +62,7 @@ class Screen(ABC):
 
     def update(self, dt: float) -> None:
         pass
+
+    @property
+    def sound_player(self) -> Optional[SoundPlayer]:
+        return self._sound_player

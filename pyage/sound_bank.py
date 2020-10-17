@@ -125,11 +125,7 @@ class SoundBank:
 
     def create_sound_player(self) -> SoundPlayer:
 
-        player: SoundPlayer = cast(
-            AudioBackend, self._app._audio_backend
-        ).get_sound_player()
-
-        return player
+        return SoundPlayer(self._app)
 
     def get(self, snd: str) -> Optional[SoundBuffer]:
 

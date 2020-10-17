@@ -13,6 +13,3 @@ class AudioBackend(ABC):
     @abstractmethod
     def create_sound(self, buffer: SoundBuffer, player: SoundPlayer) -> Sound:
         pass
-
-    def get_sound_player(self) -> SoundPlayer:
-        return SoundPlayer()

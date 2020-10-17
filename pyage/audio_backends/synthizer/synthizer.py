@@ -9,15 +9,21 @@ from pyage.sound_player import SoundPlayer
 
 from .sound import SynthizerSound
 from .sound_buffer import SynthizerSoundBuffer
-from .sound_player import SynthizerSoundPlayer
 
 
 class Synthizer(AudioBackend):
+
+    _context: synthizer.Context
+
     def __init__(self) -> None:
 
         synthizer.initialize()
 
+        self._context = synthizer.Context()
+
     def __del__(self) -> None:
+
+        self._context.destroy()
 
         synthizer.shutdown()
 
@@ -34,8 +40,6 @@ class Synthizer(AudioBackend):
 
         return SynthizerSound(
             buffer=cast(SynthizerSoundBuffer, buffer),
-            player=cast(SynthizerSoundPlayer, player),
+            player=player,
+            context=self._context,
         )
-
-    def get_sound_player(self) -> SynthizerSoundPlayer:
-        return SynthizerSoundPlayer()
