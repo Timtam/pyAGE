@@ -127,9 +127,7 @@ class SoundBank:
 
         player: SoundPlayer = cast(
             AudioBackend, self._app._audio_backend
-        ).get_sound_player()(self._app)
-
-        player.load()
+        ).get_sound_player()
 
         return player
 

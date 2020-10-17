@@ -1,4 +1,4 @@
-from typing import Type, cast
+from typing import cast
 
 import synthizer
 
@@ -37,5 +37,5 @@ class Synthizer(AudioBackend):
             player=cast(SynthizerSoundPlayer, player),
         )
 
-    def get_sound_player(self) -> Type[SynthizerSoundPlayer]:
-        return SynthizerSoundPlayer
+    def get_sound_player(self) -> SynthizerSoundPlayer:
+        return SynthizerSoundPlayer()

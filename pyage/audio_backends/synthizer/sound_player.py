@@ -7,10 +7,12 @@ class SynthizerSoundPlayer(SoundPlayer):
 
     _context: synthizer.Context
 
-    def load(self) -> None:
+    def __init__(self) -> None:
+
+        super().__init__()
 
         self._context = synthizer.Context()
 
-    def unload(self) -> None:
+    def __del__(self) -> None:
 
         self._context.destroy()

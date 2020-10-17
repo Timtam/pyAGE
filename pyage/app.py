@@ -3,6 +3,7 @@ import traceback
 from typing import Callable, Optional
 
 import pygame
+from py_singleton import singleton
 
 from .audio_backend import AudioBackend
 from .event_processor import EventProcessor
@@ -11,10 +12,11 @@ from .screen_stack import ScreenStack
 from .sound_bank import SoundBank
 
 
+@singleton
 class App:
 
     _audio_backend: Optional[AudioBackend] = None
-    _event_processor: EventProcessor
+    _event_processor: EventProcessor = EventProcessor()
     _fps: int
     _output_backend: Optional[OutputBackend] = None
     _quit: bool = False
@@ -24,7 +26,6 @@ class App:
 
     def __init__(self) -> None:
 
-        self._event_processor = EventProcessor()
         self._screen_stack = ScreenStack(self)
         self._sound_bank = SoundBank(self)
 

@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import Type
 
 from .sound import Sound
 from .sound_buffer import SoundBuffer
@@ -15,5 +14,5 @@ class AudioBackend(ABC):
     def create_sound(self, buffer: SoundBuffer, player: SoundPlayer) -> Sound:
         pass
 
-    def get_sound_player(self) -> Type[SoundPlayer]:
-        return SoundPlayer
+    def get_sound_player(self) -> SoundPlayer:
+        return SoundPlayer()

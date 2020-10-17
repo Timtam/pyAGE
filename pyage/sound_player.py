@@ -13,15 +13,11 @@ class SoundPlayer(ABC):
 
     _app: "App"
 
-    def __init__(self, app: "App") -> None:
+    def __init__(self) -> None:
 
-        self._app = app
+        from pyage.app import App
 
-    def load(self) -> None:
-        pass
-
-    def unload(self) -> None:
-        pass
+        self._app = App()
 
     def get(self, snd: str) -> Optional["Sound"]:
 
