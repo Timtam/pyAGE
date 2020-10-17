@@ -11,12 +11,12 @@ class Menu(Screen):
     _items: List[MenuItem]
     _wrap: bool
 
-    def __init__(self, wrap: bool = False) -> None:
+    def __init__(self, items: List[MenuItem] = [], wrap: bool = False) -> None:
 
         super().__init__()
 
         self._item_index = 0
-        self._items = []
+        self._items = items
         self._wrap = wrap
 
         self.add_key_event(key=KEY.UP, function=self.select_previous_item)
