@@ -53,3 +53,7 @@ class KeyEvent(Event):
     @property
     def pressed(self) -> bool:
         return self._pressed
+
+    def __call__(self) -> None:
+
+        self._function(self._pressed)

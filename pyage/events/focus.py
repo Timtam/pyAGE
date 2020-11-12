@@ -17,3 +17,7 @@ class FocusEvent(Event):
     @property
     def gain(self) -> bool:
         return self._gain
+
+    def __call__(self) -> None:
+
+        self._function(self._gain)

@@ -2,7 +2,7 @@ import copy
 import heapq
 import time
 import traceback
-from typing import Callable, List, Optional, Tuple, cast
+from typing import Any, Callable, List, Optional, Tuple, cast
 
 import pygame
 
@@ -10,6 +10,7 @@ from pyage.constants import EVENT, KEY, MOD
 from pyage.event import Event
 from pyage.events.focus import FocusEvent
 from pyage.events.key import KeyEvent
+from pyage.events.schedule import ScheduleEvent
 
 
 class EventProcessor:
@@ -97,8 +98,6 @@ class EventProcessor:
                 ):
                     return
 
-            e._function(cast(KeyEvent, e)._pressed)
-
             if cast(KeyEvent, e)._repeat > 0 and cast(KeyEvent, e)._pressed:
                 heapq.heappush(
                     self._event_queue,
@@ -108,8 +107,7 @@ class EventProcessor:
                     ),
                 )
 
-        elif e._type == EVENT.FOCUS:
-            e._function(cast(FocusEvent, e)._gain)
+        e()
 
     def _unregister_event(self, e: Event) -> None:
 
@@ -208,3 +206,12 @@ class EventProcessor:
         ]
 
         self._unregistered_events = self._unregistered_events + events
+
+    def add_schedule_event(
+        self, delay: float, function: Callable[..., None], *args: Any, **kwargs: Any
+    ) -> None:
+
+        heapq.heappush(
+            self._event_queue,
+            (time.time() + delay, ScheduleEvent(function, *args, **kwargs)),
+        )
