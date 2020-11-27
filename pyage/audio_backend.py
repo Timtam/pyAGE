@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 
 from .sound import Sound
 from .sound_buffer import SoundBuffer
-from .sound_player import SoundPlayer
 
 
 class AudioBackend(ABC):
@@ -11,5 +10,5 @@ class AudioBackend(ABC):
         pass
 
     @abstractmethod
-    def create_sound(self, buffer: SoundBuffer, player: SoundPlayer) -> Sound:
+    def create_sound(self, buffer: SoundBuffer) -> Sound:
         pass

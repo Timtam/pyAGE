@@ -41,7 +41,10 @@ class MenuItem(ABC):
 
         for e in self._keys:
             cast("App", cast("Menu", self._menu)._app)._event_processor.add_key_event(
-                key=e._key, function=e._function, mod=e._mod, repeat=e._repeat
+                key=e._key,
+                function=e._function,
+                mod=e._mod,
+                repeat=e._repeat,
             )
 
     def deselected(self) -> None:

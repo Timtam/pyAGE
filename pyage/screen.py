@@ -11,19 +11,17 @@ if TYPE_CHECKING:
 
 class Screen(ABC):
 
-    _app: Optional["App"] = None
+    _app: "App"
     _keys: List[KeyEvent]
-    _sound_player: Optional[SoundPlayer] = None
+    _sound_player: SoundPlayer
 
     def __init__(self) -> None:
 
+        from pyage.app import App
+
+        self._app = App()
         self._keys = []
-
-    def _create(self, app: "App") -> None:
-
-        self._app = app
-
-        self._sound_player = cast("App", self._app).sound_bank.create_sound_player()
+        self._sound_player = self._app.sound_bank.create_sound_player()
 
     def add_key_event(
         self,
@@ -48,7 +46,10 @@ class Screen(ABC):
 
         for e in self._keys:
             cast("App", self._app)._event_processor.add_key_event(
-                key=e._key, function=e._function, mod=e._mod, repeat=e._repeat
+                key=e._key,
+                function=e._function,
+                mod=e._mod,
+                repeat=e._repeat,
             )
 
     def hidden(self, popped: bool) -> None:
@@ -66,3 +67,7 @@ class Screen(ABC):
     @property
     def sound_player(self) -> Optional[SoundPlayer]:
         return self._sound_player
+
+    def __del__(self) -> None:
+
+        del self._sound_player

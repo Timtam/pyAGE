@@ -17,8 +17,6 @@ class ScreenStack:
 
     def push(self, screen: Screen) -> None:
 
-        screen._create(self._app)
-
         if len(self._screen_stack) > 0:
             self._screen_stack[-1].hidden(False)
 
