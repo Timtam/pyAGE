@@ -163,16 +163,68 @@ class EventProcessor:
         mod: MOD = MOD.NONE,
         repeat: float = 0.0,
     ) -> None:
+        """
+        registers a callback which gets called whenever the specified key is pressed
+
+        Parameters
+        ----------
+        function
+
+            a function that receives :obj:`True` when the key was pressed or :obj:`False` if it was released
+
+        key
+
+            one of the several constants from the :class:`pyage.constants.KEY` enumeration
+
+        mod
+
+            one of :class:`pyage.constants.MOD` constants (default :attr:`pyage.constants.MOD.NONE`)
+
+        repeat
+
+            allows to specify a time interval in seconds after which the
+            callback will be called again if the key is still pressed. Can for
+            example be used to take one step for every 0.2 seconds that passed
+            while the key is hold down. Default is 0, which will only raise
+            the event when the key gets pressed and released.
+        """
 
         self._registered_events.append(
             KeyEvent(function=function, key=key, mod=mod, repeat=repeat)
         )
 
     def add_focus_event(self, function: Callable[[bool], None]) -> None:
+        """
+        registers a callback that gets called whenever the pyAGE app loses or
+        receives focus. Can be used to pause a game or silence sounds when the
+        user switches to another window.
+
+        Parameters
+        ----------
+        function
+
+            a callback that will receive :obj:`True` as argument when the app
+            receives focus or :obj:`False` when it loses focus.
+        """
 
         self._registered_events.append(FocusEvent(function))
 
-    def remove_key_event(self, key: int, mod: int = 0) -> None:
+    def remove_key_event(self, key: KEY, mod: MOD = MOD.NONE) -> None:
+        """
+        removes a previously registered callback to no longer get called
+        whenever the key is pressed.
+
+        Parameters
+        ----------
+        key
+
+            one of the :class:`pyage.constants.KEY` constants
+
+        mod
+
+            one of the :class:`pyage.constants.MOD` constants (default
+            :attr:`pyage.constants.MOD.NONE`)
+        """
 
         f: Event
 
@@ -186,6 +238,16 @@ class EventProcessor:
                 self._unregistered_events.append(f)
 
     def remove_focus_event(self, function: Callable[[bool], None]) -> None:
+        """
+        removes a previously registered focus callback
+
+        Parameters
+        ----------
+        function
+
+            the function registered via
+            :meth:`pyage.event_processor.EventProcessor.add_focus_event`
+        """
 
         f: Event
 
@@ -198,6 +260,9 @@ class EventProcessor:
                 self._unregistered_events.append(f)
 
     def remove_all_key_events(self) -> None:
+        """
+        discards all key events
+        """
 
         events: List[Event] = [
             f
@@ -210,6 +275,27 @@ class EventProcessor:
     def add_schedule_event(
         self, delay: float, function: Callable[..., None], *args: Any, **kwargs: Any
     ) -> None:
+        """
+        registers a callback that gets called after a given period of time
+
+        Parameters
+        ----------
+        delay
+
+            a certain time in seconds
+
+        function
+
+            any callback without specific parameters
+
+        args
+
+            arguments that will be passed to the callback
+
+        kwargs
+
+            keyword arguments that will be passed to the callback
+        """
 
         heapq.heappush(
             self._event_queue,
