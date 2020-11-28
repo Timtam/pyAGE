@@ -1,26 +1,17 @@
 from abc import ABC
-from typing import TYPE_CHECKING, Callable, List, Optional, cast
+from typing import Callable, List
 
 from pyage.constants import KEY, MOD
 from pyage.events.key import KeyEvent
-
-if TYPE_CHECKING:
-    from pyage.app import App
-    from pyage.screens.menu import Menu
 
 
 class MenuItem(ABC):
 
     _keys: List[KeyEvent]
-    _menu: Optional["Menu"] = None
 
     def __init__(self) -> None:
 
         self._keys = []
-
-    def _create(self, menu: "Menu") -> None:
-
-        self._menu = menu
 
     def add_key_event(
         self,
@@ -39,8 +30,12 @@ class MenuItem(ABC):
 
         e: KeyEvent
 
+        from pyage.app import App
+
+        app: App = App()
+
         for e in self._keys:
-            cast("App", cast("Menu", self._menu)._app)._event_processor.add_key_event(
+            app._event_processor.add_key_event(
                 key=e._key,
                 function=e._function,
                 mod=e._mod,
@@ -51,11 +46,9 @@ class MenuItem(ABC):
 
         e: KeyEvent
 
-        for e in self._keys:
-            cast(
-                "App", cast("Menu", self._menu)._app
-            )._event_processor.remove_key_event(key=e._key, mod=e._mod)
+        from pyage.app import App
 
-    @property
-    def menu(self) -> Optional["Menu"]:
-        return self._menu
+        app: App = App()
+
+        for e in self._keys:
+            app._event_processor.remove_key_event(key=e._key, mod=e._mod)

@@ -42,8 +42,6 @@ class Menu(Screen):
 
     def add_item(self, item: MenuItem) -> None:
 
-        item._create(self)
-
         self._items.append(item)
 
     def select_previous_item(self, pressed: bool) -> None:
