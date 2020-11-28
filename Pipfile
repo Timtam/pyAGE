@@ -7,7 +7,7 @@ name = "pypi"
 cytolk = "*"
 synthizer = "*"
 pygame = "==2.0.0-dev12"
-py-singleton = "*"
+python-singleton-metaclasses = "*"
 
 [dev-packages]
 black = "*"
@@ -16,6 +16,7 @@ isort = "*"
 mypy = "*"
 pre-commit = "*"
 sphinx = "*"
+sphinx-autodoc-typehints = "*"
 
 [requires]
 python_version = "3.8"

@@ -3,7 +3,7 @@ import traceback
 from typing import Callable, Optional
 
 import pygame
-from py_singleton import singleton
+from pysingleton import PySingleton
 
 from .audio_backend import AudioBackend
 from .event_processor import EventProcessor
@@ -12,8 +12,22 @@ from .screen_stack import ScreenStack
 from .sound_bank import SoundBank
 
 
-@singleton
-class App:
+class App(metaclass=PySingleton):
+
+    """
+    The app is the central object which handles the game loop. It is fairly
+    simple to use, but very important as well.
+
+    Using :meth:`pyage.app.App.show` will initialize the game, while
+    :meth:`pyage.app.App.process` will run the actual game loop.
+    :meth:`pyage.app.App.quit` can be used at any time to quit the game.
+
+    Accessing the :attr:`pyage.app.App.event_processor` attribute will enable
+    you to manually register events on the fly.
+
+    Please note that :class:`pyage.app.App` is a singleton class, thus you
+    can import and initialize this class at any time to get access to it.
+    """
 
     _audio_backend: Optional[AudioBackend] = None
     _event_processor: EventProcessor = EventProcessor()
@@ -36,6 +50,36 @@ class App:
         audio_backend: Optional[AudioBackend] = None,
         output_backend: Optional[OutputBackend] = None,
     ) -> None:
+
+        """
+        Initializes the game by providing a window title and the target fps
+        rate. You can also inject your custom audio and screen reader output
+        backends here.
+
+        Parameters
+        ----------
+        title
+
+            the window title for the game
+
+        fps
+
+            the amount of fps targeted by the app, default 30
+
+        audio_backend
+
+            a custom audio backend to use, default None, which will use the
+            default audio backend, Synthizer.
+
+        output_backend
+
+            a custom screen reader backend to use, default None, which will
+            use cytolk for communicating with screen readers.
+
+        Returns
+        -------
+
+        """
 
         self._fps = fps
         self._title = title
@@ -65,9 +109,40 @@ class App:
         pygame.display.flip()
 
     def quit(self) -> None:
+        """
+        This method will tell the game loop to quit as soon as possible, releasing all resources in the process.
+
+        Parameters
+        ----------
+
+
+        Returns
+        -------
+        :obj:`None`
+
+        """
+
         self._quit = True
 
     def process(self, fn: Optional[Callable[["App", float], None]] = None) -> None:
+        """
+        This method will run the game loop and keeps the game going.
+
+        Parameters
+        ----------
+        fn
+
+            an optional function which will be called once for every frame.
+            It should be as fast as possible to prevent frame drops.
+            The function needs to take two parameters. The first parameter is
+            the App object, and the second parameter is a float which
+            determines the delta time since the last frame in seconds.
+
+        Returns
+        -------
+
+
+        """
 
         clock: pygame.time.Clock = pygame.time.Clock()
 
@@ -105,13 +180,38 @@ class App:
 
     @property
     def window_title(self) -> str:
+        """
+        Allows to read the window title for the game.
+        """
+
         return self._title
 
     @property
     def event_processor(self) -> EventProcessor:
+        """
+        Allows access to the event processor to manually insert events on the
+        fly.
+        """
+
         return self._event_processor
 
     def show_message_box(self, message: str, title: Optional[str] = None) -> None:
+        """
+        Allows you to show a message box which doesn't depend on any external
+        library, but only Python standard library tools instead.
+
+        Parameters
+        ----------
+        message
+
+            the message to be shown
+
+        title
+
+            the window title (default is the app name given to
+            :meth:`pyage.app.App.show`)
+
+        """
 
         if not title:
             title = self.window_title
@@ -132,16 +232,37 @@ class App:
 
     @property
     def output_backend(self) -> Optional[OutputBackend]:
+        """
+        Allows access to the output backend to e.g. send messages to screen
+        readers
+        """
+
         return self._output_backend
 
     @property
     def screen_stack(self) -> ScreenStack:
+        """
+        The screen stack which cares for all your different screens and which
+        forwards all events to the relevant screen(s). You need to access that
+        in order to push or pop screens.
+        """
+
         return self._screen_stack
 
     @property
     def audio_backend(self) -> Optional[AudioBackend]:
+        """
+        The audio backend used by pyAGE.
+        """
+
         return self._audio_backend
 
     @property
     def sound_bank(self) -> SoundBank:
+        """
+        The entrypoint for all sound-related functionality built into pyage.
+        Create sounds and sound players, as well as caching your sounds will
+        all be done there.
+        """
+
         return self._sound_bank

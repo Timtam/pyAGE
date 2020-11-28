@@ -38,6 +38,8 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
+    "sphinx.ext.napoleon",
+    "sphinx_autodoc_typehints",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -98,3 +100,6 @@ html_show_copyright = True
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
 }
+
+
+napoleon_use_param = True
