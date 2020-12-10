@@ -2,25 +2,41 @@ import fnmatch
 import random
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING, Dict, Generator, List, Optional, Union, cast
+from typing import Dict, Generator, List, Optional, Union, cast
+
+import pyage.app
 
 from .audio_backend import AudioBackend
 from .exceptions import AudioLoadError
 from .sound_buffer import SoundBuffer
 from .sound_player import SoundPlayer
 
-if TYPE_CHECKING:
-    from pyage.app import App
-
 
 class SoundBank:
+    """
+    The sound bank allows you to load sound buffers via the
+    :meth:`pyage.sound_bank.SoundBank.load` method, after which you can access
+    the loaded buffers either by indexing the sound bank object with
+    :code:`app.sound_bank['test']` or by calling the
+    :meth:`pyage.sound_bank.SoundBank.get` method. Both those ways will return
+    a :class:`pyage.sound_buffer.SoundBuffer` class, which will usually not be
+    of any help to you, since they're mostly used internally. To access the
+    playable sounds, you'll first need to create a
+    :class:`pyage.sound_player.SoundPlayer` object by calling the
+    :meth:`pyage.sound_bank.SoundBank.create_sound_player` method. A sound
+    player is used to control the behaviour of sounds in a specific scene,
+    like reverb effects, overall position etc, and will finally give you
+    access to all the sounds you can play in your game. Since you cannot gain
+    access to a sound player without the sound bank, you'll first have to take
+    a look into the useful tools this class can offer you.
+    """
 
-    _app: "App"
+    _app: "pyage.app.App"
     _buffers: Dict[str, SoundBuffer]
     _file_extension: str = ".ogg"
     _source_path: Path
 
-    def __init__(self, app: "App") -> None:
+    def __init__(self, app: "pyage.app.App") -> None:
 
         self._app = app
         self._buffers = {}
@@ -28,6 +44,20 @@ class SoundBank:
 
     @property
     def source_path(self) -> Path:
+        """
+        the source path is the path where the :meth:`pyage.sound_bank.SoundBank.load` method will look by default when searching for a specific sound to load. The default is the working directory of the current app.
+
+        Raises
+        ------
+        :exc:`AttributeError`
+
+            either you cannot change the source path after sounds are already loaded, the given path does not exist or the path doesn't point to a directory
+
+        :exc:`TypeError`
+
+            path parameter has invalid type
+        """
+
         return self._source_path
 
     @source_path.setter
@@ -45,7 +75,7 @@ class SoundBank:
         elif isinstance(path, Path):
             temp = path
         else:
-            raise TypeError("path attribute must be of type 'str'")
+            raise TypeError("path attribute must be a Path or str")
 
         if not temp.exists():
             raise AttributeError("the given path doesn't exist")
@@ -57,13 +87,28 @@ class SoundBank:
 
     @property
     def file_extension(self) -> str:
+        """
+        the file extension that will automatically be added to the sound to be
+        loaded by :meth:`pyage.sound_bank.SoundBank.load`
+
+        Raises
+        ------
+        :exc:`AttributeError`
+
+            you cannot change the file extension when sounds are already loaded
+
+        :exc:`TypeError`
+
+            extension must be of type str
+        """
+
         return self._file_extension
 
     @file_extension.setter
     def file_extension(self, extension: str) -> None:
 
         if not isinstance(extension, str):
-            raise TypeError("extension attribute must be of type 'str'")
+            raise TypeError("extension attribute must be of type str")
 
         if len(self._buffers) > 0:
             raise AttributeError(
@@ -73,6 +118,29 @@ class SoundBank:
         self._file_extension = extension
 
     def load(self, snd: str) -> int:
+        """
+        loads one or more sounds into memory and prepares it to be played
+
+        Parameters
+        ----------
+        snd
+
+            a specifier which will be used to search for sounds. The specifier
+            may be a file name without the
+            :attr:`pyage.sound_bank.SoundBank.source_path` path prefix and may
+            not have an extension, since the
+            :attr:`pyage.sound_bank.SoundBank.file_extension` will
+            automatically be appended. You can however use glob patterns (e.g.
+            *) to search for multiple files at once. The call
+            :code:`app.sound_bank.load('sword-hit-*')` will load all files
+            into memory that start with sword-hit-.
+
+        Returns
+        -------
+        int
+
+            the amount of sounds loaded
+        """
 
         buffer: SoundBuffer
         exc: AudioLoadError
@@ -124,10 +192,22 @@ class SoundBank:
         self._buffers.clear()
 
     def create_sound_player(self) -> SoundPlayer:
+        """
+        create a sound player which is needed to play and manage sounds
+        """
 
         return SoundPlayer(self._app)
 
     def get(self, snd: str) -> Optional[SoundBuffer]:
+        """
+        access a sound buffer object which was previously loaded via :meth:`pyage.sound_bank.SoundBank.load`. This will usually not be required, since all the sound buffer handling will be done for you automatically.
+
+        Parameters
+        ----------
+        snd
+
+            a specifier like in :meth:`pyage.sound_buffer.SoundBuffer.load`. If a glob pattern is used, a random sound buffer matching the pattern will be returned.
+        """
 
         if snd in self:
 

@@ -61,6 +61,20 @@ dedicated methods in the below class.
    :inherited-members:
 
 
+SoundBank: let's get noisy
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The sound system of **pyAGE** is fairly complex, but everything begins in the 
+global sound bank, which fulfills the job to cache all your sounds and allows 
+access to the several underlying buffers in order to create a new sound. The 
+remaining parts of the sound system will be discussed in the specific 
+:ref:`chapter <sound-system>`, but the :class:`pyage.sound_bank.SoundBank` 
+class will be listed here.
+
+.. autoclass:: pyage.sound_bank.SoundBank
+   :inherited-members:
+
+
 Pre-defined screens
 -------------------
 
@@ -85,3 +99,8 @@ Menu
 .. autoclass:: pyage.screens.menu.Menu
    :inherited-members:
 
+
+.. _sound-system:
+
+The in-depth discussion of pyAGE's sound system
+-----------------------------------------------
