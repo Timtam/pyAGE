@@ -5,6 +5,7 @@ import traceback
 from typing import Any, Callable, List, Optional, Tuple, cast
 
 import pygame
+from pysingleton import PySingleton
 
 from pyage.constants import EVENT, KEY, MOD
 from pyage.event import Event
@@ -13,7 +14,7 @@ from pyage.events.key import KeyEvent
 from pyage.events.schedule import ScheduleEvent
 
 
-class EventProcessor:
+class EventProcessor(metaclass=PySingleton):
 
     _event_queue: List[Tuple[float, Event]] = []
     _registered_events: List[Event] = []
