@@ -7,6 +7,22 @@ from .menu_item import MenuItem
 
 
 class Button(MenuItem):
+    """
+    This class represents a simple button which can be activated by pressing
+    the return key. Doing so will call a function which can be provided by the
+    user.
+
+    Parameters
+    ----------
+    text
+
+        the text to show when selecting this button
+
+    function
+
+        a function which gets called when pressing return while the button is
+        selected.
+    """
 
     _function: Any  # not yet supported by mypy
     _text: str

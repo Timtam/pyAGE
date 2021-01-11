@@ -7,6 +7,12 @@ from pyage.events.key import KeyEvent
 
 
 class MenuItem(ABC):
+    """
+    This is an abstract class which represents the base of every other menu
+    item that can be used together with the :class:`pyage.screens.menu.Menu`
+    screen. You'll need to inherit this class when creating your own type of
+    menu items.
+    """
 
     _keys: List[KeyEvent]
 
@@ -21,6 +27,31 @@ class MenuItem(ABC):
         mod: MOD = MOD.NONE,
         repeat: float = 0.0,
     ) -> None:
+        """
+        Just like :meth:`pyage.screen.Screen.add_key_event`, this method allows you to add key events which will only trigger as long as this specific menu item is currently selected.
+
+        Parameters
+        ----------
+        function
+
+            a function that receives :obj:`True` when the key was pressed or :obj:`False` if it was released
+
+        key
+
+            one of the several constants from the :class:`pyage.constants.KEY` enumeration
+
+        mod
+
+            one of :class:`pyage.constants.MOD` constants (default :attr:`pyage.constants.MOD.NONE`)
+
+        repeat
+
+            allows to specify a time interval in seconds after which the
+            callback will be called again if the key is still pressed. Can for
+            example be used to take one step for every 0.2 seconds that passed
+            while the key is hold down. Default is 0, which will only raise
+            the event when the key gets pressed and released.
+        """
 
         e: KeyEvent = KeyEvent(key=key, function=function, mod=mod, repeat=repeat)
 
@@ -28,6 +59,9 @@ class MenuItem(ABC):
             self._keys.append(e)
 
     def selected(self) -> None:
+        """
+        This method will be called whenever this item gets selected.
+        """
 
         e: KeyEvent
         ev: EventProcessor = EventProcessor()
@@ -41,6 +75,9 @@ class MenuItem(ABC):
             )
 
     def deselected(self) -> None:
+        """
+        This method will be called whenever this item gets deselected within the menu.
+        """
 
         e: KeyEvent
         ev: EventProcessor = EventProcessor()
