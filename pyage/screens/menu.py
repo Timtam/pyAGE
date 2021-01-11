@@ -6,6 +6,31 @@ from pyage.screens.items.menu_item import MenuItem
 
 
 class Menu(Screen):
+    """
+    this class provides basic menu support for audio games. You can use it in
+    two ways:
+
+    * instantiating it and adding items to it on-the-fly (see either
+      :meth:`~pyage.screens.menu.Menu.add_item` or the parameters below),
+      which can be useful for displaying static data
+    * inheriting it, which is encouraged for more complex applications.
+
+    **pyAGE** already contains several types of menu items which can be
+    combined freely to create whatever menu you want. All of those are
+    documented :ref:`here <menu-items>`:
+
+    Parameters
+    ----------
+    items
+
+        a list of items for the menu. Items can however be added later
+        with the use of the :meth:`~pyage.screens.menu.Menu.add_item` method.
+
+    wrap
+
+        does the menu wrap (pressing up or down arrow when on the edge of
+        the menu will reset the cursor to the opposite end of the menu)?
+    """
 
     _item_index: int
     _items: List[MenuItem]
@@ -41,6 +66,15 @@ class Menu(Screen):
             pass
 
     def add_item(self, item: MenuItem) -> None:
+        """
+        adds an item to the list of items shown in this menu.
+
+        Parameters
+        ----------
+        item
+
+            the menu item (a list can be found :ref:`here as well <menu-items>`)
+        """
 
         self._items.append(item)
 

@@ -10,12 +10,6 @@ from .sound_player import SoundPlayer
 
 
 class Screen(ABC):
-    """
-    This class is an abstract class and cannot be instantiated, but needs to
-    be inherited to create your own screens which will then be managed by the
-    :class:`pyage.screen_stack.ScreenStack` class. It also is the base class
-    for any pre-defined screens within pyAGE itself.
-    """
 
     _event_processor: EventProcessor = EventProcessor()
     _keys: List[KeyEvent]

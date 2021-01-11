@@ -247,7 +247,7 @@ class EventProcessor(metaclass=PySingleton):
         function
 
             the function registered via
-            :meth:`pyage.event_processor.EventProcessor.add_focus_event`
+            :meth:`~pyage.event_processor.EventProcessor.add_focus_event`
         """
 
         f: Event

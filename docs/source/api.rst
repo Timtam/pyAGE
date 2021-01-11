@@ -23,13 +23,13 @@ game in general. This class is documented as follows:
 ScreenStack: changing scenes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-By accessing the :class:`pyage.screen_stack.ScreenStack` instance through 
+By accessing the :class:`~pyage.screen_stack.ScreenStack` instance through 
 :attr:`pyage.app.App.screen_stack`, you can 
-:meth:`pyage.screen_stack.ScreenStack.push` new screens on top of the screen 
-stack or :meth:`pyage.screen_stack.ScreenStack.pop` unwanted screens from the 
+:meth:`~pyage.screen_stack.ScreenStack.push` new screens on top of the screen 
+stack or :meth:`~pyage.screen_stack.ScreenStack.pop` unwanted screens from the 
 top of the screen stack at any time. The top-most screen will receive all 
-events the game has to offer, including :class:`pyage.events.focus.FocusEvent` 
-and :class:`pyage.events.key.KeyEvent`.
+events the game has to offer, including :class:`~pyage.events.focus.FocusEvent` 
+and :class:`~pyage.events.key.KeyEvent`.
 
 .. autoclass:: pyage.screen_stack.ScreenStack
    :inherited-members:
@@ -56,6 +56,10 @@ method can be used to stop calling your function when its not necessary anymore.
 There are quite a few event types that you can subscribe to, and there will 
 probably be more in the future, and all of those can be accessed via the 
 dedicated methods in the below class.
+
+It is worth mentioning that the EventProcessor class is a singleton class, 
+which means that you can import it and instanciate it at any time to access 
+its methods and listen to some events yourself.
 
 .. autoclass:: pyage.event_processor.EventProcessor
    :inherited-members:
@@ -84,7 +88,8 @@ is a situation which can handle various events, like key inputs, but represents
 a certain state in time. You cannot have multiple screens open at the same 
 time, just like it doesn't make much sense to have multiple menus running at 
 the same time. PyAGE already provides several screens for you, which you'll 
-have to inherit or use in order to interact with the user. The available classes will be explained below.
+have to inherit or use in order to interact with the user. The available classes 
+will be explained below.
 
 Screen
 ~~~~~~
@@ -104,3 +109,26 @@ Menu
 
 The in-depth discussion of pyAGE's sound system
 -----------------------------------------------
+
+
+.. _menu-items:
+
+List of pre-defined menu items
+------------------------------
+
+**pyAGE** already provides some menu item classes which can be used in 
+combination with the :class:`pyage.screens.menu.Menu` class documented above.
+
+MenuItem
+~~~~~~~~
+
+.. autoclass:: pyage.screens.items.menu_item.MenuItem
+   :inherited-members:
+
+
+Button
+~~~~~~
+
+.. autoclass:: pyage.screens.items.button.Button
+   :inherited-members:
+

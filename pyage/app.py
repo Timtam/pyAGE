@@ -18,12 +18,9 @@ class App(metaclass=PySingleton):
     The app is the central object which handles the game loop. It is fairly
     simple to use, but very important as well.
 
-    Using :meth:`pyage.app.App.show` will initialize the game, while
-    :meth:`pyage.app.App.process` will run the actual game loop.
-    :meth:`pyage.app.App.quit` can be used at any time to quit the game.
-
-    Accessing the :attr:`pyage.app.App.event_processor` attribute will enable
-    you to manually register events on the fly.
+    Using :meth:`~pyage.app.App.show` will initialize the game, while
+    :meth:`~pyage.app.App.process` will run the actual game loop.
+    :meth:`~pyage.app.App.quit` can be used at any time to quit the game.
 
     Please note that :class:`pyage.app.App` is a singleton class, thus you
     can import and initialize this class at any time to get access to it.
@@ -75,10 +72,6 @@ class App(metaclass=PySingleton):
 
             a custom screen reader backend to use, default None, which will
             use cytolk for communicating with screen readers.
-
-        Returns
-        -------
-
         """
 
         self._fps = fps
@@ -115,11 +108,6 @@ class App(metaclass=PySingleton):
         Parameters
         ----------
 
-
-        Returns
-        -------
-        :obj:`None`
-
         """
 
         self._quit = True
@@ -137,10 +125,6 @@ class App(metaclass=PySingleton):
             The function needs to take two parameters. The first parameter is
             the App object, and the second parameter is a float which
             determines the delta time since the last frame in seconds.
-
-        Returns
-        -------
-
 
         """
 
@@ -186,15 +170,6 @@ class App(metaclass=PySingleton):
 
         return self._title
 
-    @property
-    def event_processor(self) -> EventProcessor:
-        """
-        Allows access to the event processor to manually insert events on the
-        fly.
-        """
-
-        return self._event_processor
-
     def show_message_box(self, message: str, title: Optional[str] = None) -> None:
         """
         Allows you to show a message box which doesn't depend on any external
@@ -209,7 +184,7 @@ class App(metaclass=PySingleton):
         title
 
             the window title (default is the app name given to
-            :meth:`pyage.app.App.show`)
+            :meth:`~pyage.app.App.show`)
 
         """
 

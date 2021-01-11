@@ -15,10 +15,10 @@ from .sound_player import SoundPlayer
 class SoundBank:
     """
     The sound bank allows you to load sound buffers via the
-    :meth:`pyage.sound_bank.SoundBank.load` method, after which you can access
+    :meth:`~pyage.sound_bank.SoundBank.load` method, after which you can access
     the loaded buffers either by indexing the sound bank object with
     :code:`app.sound_bank['test']` or by calling the
-    :meth:`pyage.sound_bank.SoundBank.get` method. Both those ways will return
+    :meth:`~pyage.sound_bank.SoundBank.get` method. Both those ways will return
     a :class:`pyage.sound_buffer.SoundBuffer` class, which will usually not be
     of any help to you, since they're mostly used internally. To access the
     playable sounds, you'll first need to create a
@@ -45,13 +45,18 @@ class SoundBank:
     @property
     def source_path(self) -> Path:
         """
-        the source path is the path where the :meth:`pyage.sound_bank.SoundBank.load` method will look by default when searching for a specific sound to load. The default is the working directory of the current app.
+        the source path is the path where the
+        :meth:`~pyage.sound_bank.SoundBank.load` method will look by default
+        when searching for a specific sound to load. The default is the
+        working directory of the current app.
 
         Raises
         ------
         :exc:`AttributeError`
 
-            either you cannot change the source path after sounds are already loaded, the given path does not exist or the path doesn't point to a directory
+            either you cannot change the source path after sounds are already
+            loaded, the given path does not exist or the path doesn't point to
+            a directory
 
         :exc:`TypeError`
 
@@ -89,7 +94,7 @@ class SoundBank:
     def file_extension(self) -> str:
         """
         the file extension that will automatically be added to the sound to be
-        loaded by :meth:`pyage.sound_bank.SoundBank.load`
+        loaded by :meth:`~pyage.sound_bank.SoundBank.load`
 
         Raises
         ------
@@ -127,13 +132,16 @@ class SoundBank:
 
             a specifier which will be used to search for sounds. The specifier
             may be a file name without the
-            :attr:`pyage.sound_bank.SoundBank.source_path` path prefix and may
+            :attr:`~pyage.sound_bank.SoundBank.source_path` path prefix and may
             not have an extension, since the
-            :attr:`pyage.sound_bank.SoundBank.file_extension` will
-            automatically be appended. You can however use glob patterns (e.g.
-            *) to search for multiple files at once. The call
-            :code:`app.sound_bank.load('sword-hit-*')` will load all files
-            into memory that start with sword-hit-.
+            :attr:`~pyage.sound_bank.SoundBank.file_extension` will
+            automatically be appended. You can however use glob patterns to
+            search for multiple files at once.
+
+            .. code-block:: python
+
+               # this will load all files starting with sword-hit_
+               pyage.app.App().sound_bank.load('sword-hit_*')
 
         Returns
         -------
@@ -200,13 +208,18 @@ class SoundBank:
 
     def get(self, snd: str) -> Optional[SoundBuffer]:
         """
-        access a sound buffer object which was previously loaded via :meth:`pyage.sound_bank.SoundBank.load`. This will usually not be required, since all the sound buffer handling will be done for you automatically.
+        access a sound buffer object which was previously loaded via
+        :meth:`~pyage.sound_bank.SoundBank.load`. This will usually not be
+        required, since all the sound buffer handling will be done for you
+        automatically.
 
         Parameters
         ----------
         snd
 
-            a specifier like in :meth:`pyage.sound_buffer.SoundBuffer.load`. If a glob pattern is used, a random sound buffer matching the pattern will be returned.
+            a specifier like in :meth:`pyage.sound_buffer.SoundBuffer.load`.
+            If a glob pattern is used, a random sound buffer matching the
+            pattern will be returned.
         """
 
         if snd in self:

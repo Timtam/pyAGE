@@ -2,6 +2,7 @@ from abc import ABC
 from typing import Callable, List
 
 from pyage.constants import KEY, MOD
+from pyage.event_processor import EventProcessor
 from pyage.events.key import KeyEvent
 
 
@@ -29,13 +30,10 @@ class MenuItem(ABC):
     def selected(self) -> None:
 
         e: KeyEvent
-
-        from pyage.app import App
-
-        app: App = App()
+        ev: EventProcessor = EventProcessor()
 
         for e in self._keys:
-            app._event_processor.add_key_event(
+            ev.add_key_event(
                 key=e._key,
                 function=e._function,
                 mod=e._mod,
@@ -45,10 +43,7 @@ class MenuItem(ABC):
     def deselected(self) -> None:
 
         e: KeyEvent
-
-        from pyage.app import App
-
-        app: App = App()
+        ev: EventProcessor = EventProcessor()
 
         for e in self._keys:
-            app._event_processor.remove_key_event(key=e._key, mod=e._mod)
+            ev.remove_key_event(key=e._key, mod=e._mod)
