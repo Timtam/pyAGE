@@ -78,9 +78,13 @@ class App(metaclass=PySingleton):
         self._title = title
 
         if output_backend is None:
-            from pyage.output_backends.tolk import Tolk
+            try:
+                from pyage.output_backends.tolk import Tolk
 
-            self._output_backend = Tolk()
+                self._output_backend = Tolk()
+            except ImportError:
+                self._output_backend = None
+
         else:
             self._output_backend = output_backend
 
