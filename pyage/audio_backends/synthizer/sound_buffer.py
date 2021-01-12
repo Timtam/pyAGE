@@ -16,4 +16,7 @@ class SynthizerSoundBuffer(SoundBuffer):
     def __del__(self) -> None:
 
         if self._buffer:
-            self._buffer.destroy()
+            try:
+                self._buffer.destroy()
+            except synthizer.SynthizerError:
+                pass

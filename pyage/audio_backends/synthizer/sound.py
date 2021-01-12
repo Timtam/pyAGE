@@ -1,4 +1,3 @@
-import warnings
 from typing import cast
 
 import synthizer
@@ -52,9 +51,7 @@ class SynthizerSound(Sound):
             self._source.destroy()
             self._generator.destroy()
         except synthizer.SynthizerError:
-            warnings.warn(
-                "invalid handle when garbage collecting synthizer sound. SoundPlayer object not properly unloaded before ending the pyage game loop?"
-            )
+            pass
 
     def is_playing(self) -> bool:
 
