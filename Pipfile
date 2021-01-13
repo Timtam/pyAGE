@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 cytolk = "*"
 synthizer = "*"
-pygame = "==2.0.0-dev12"
+pygame = "==2.0.1"
 python-singleton-metaclasses = "*"
 
 [dev-packages]
