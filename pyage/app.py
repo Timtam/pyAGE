@@ -98,7 +98,7 @@ class App(metaclass=PySingleton):
         try:
             pygame.display.init()
         except pygame.error as e:
-            self.show_message_box(e)
+            self.show_message_box(str(e))
             sys.exit()
 
         pygame.display.set_mode((320, 240))

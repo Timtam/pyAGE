@@ -8,8 +8,8 @@ class KeyEvent(Event):
 
     _key: KEY
     _mod: MOD
-    _pressed: bool
     _repeat: float
+    pressed: bool
 
     def __init__(
         self,
@@ -20,12 +20,12 @@ class KeyEvent(Event):
         pressed: bool = True,
     ) -> None:
 
-        Event.__init__(self, type=EVENT.KEY, function=function)
+        super().__init__(type=EVENT.KEY, function=function)
 
         self._key = key
         self._mod = mod
         self._repeat = repeat
-        self._pressed = pressed
+        self.pressed = pressed
 
     def __eq__(self, other: Any) -> bool:
 
@@ -50,10 +50,6 @@ class KeyEvent(Event):
     def repeat(self) -> float:
         return self._repeat
 
-    @property
-    def pressed(self) -> bool:
-        return self._pressed
-
     def __call__(self) -> None:
 
-        self._function(self._pressed)
+        self._function(self.pressed)

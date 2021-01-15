@@ -2,7 +2,7 @@ import copy
 import heapq
 import time
 import traceback
-from typing import Any, Callable, List, Optional, Tuple, cast
+from typing import Any, Callable, List, Optional, Sequence, Tuple, cast
 
 import pygame
 from pysingleton import PySingleton
@@ -12,15 +12,17 @@ from pyage.event import Event
 from pyage.events.focus import FocusEvent
 from pyage.events.key import KeyEvent
 from pyage.events.schedule import ScheduleEvent
+from pyage.events.text import TextEvent, TextEventCallback
 
 
 class EventProcessor(metaclass=PySingleton):
 
     _event_queue: List[Tuple[float, Event]] = []
     _registered_events: List[Event] = []
+    _text_event_count: int = 0
     _unregistered_events: List[Event] = []
 
-    def _process_pygame_event(self, e: pygame.event.EventType) -> None:
+    def _process_pygame_event(self, e: pygame.event.Event) -> None:
 
         f: Optional[Event]
         r_f: Event
@@ -32,8 +34,8 @@ class EventProcessor(metaclass=PySingleton):
                     r_f
                     for r_f in self._registered_events
                     if r_f._type == EVENT.KEY
-                    and cast(KeyEvent, r_f)._key == e.key
-                    and e.mod & cast(KeyEvent, r_f)._mod == cast(KeyEvent, r_f)._mod
+                    and cast(KeyEvent, r_f).key == e.key
+                    and e.mod & cast(KeyEvent, r_f).mod == cast(KeyEvent, r_f).mod
                 )
             except StopIteration:
                 f = None
@@ -41,7 +43,7 @@ class EventProcessor(metaclass=PySingleton):
             if f:
 
                 r_f = copy.copy(f)
-                cast(KeyEvent, r_f)._pressed = (
+                cast(KeyEvent, r_f).pressed = (
                     True if e.type == pygame.KEYDOWN else False
                 )
 
@@ -63,7 +65,7 @@ class EventProcessor(metaclass=PySingleton):
                 if f._type == EVENT.FOCUS:
 
                     r_f = copy.copy(f)
-                    cast(FocusEvent, r_f)._gain = bool(e.gain)
+                    cast(FocusEvent, r_f).gain = bool(e.gain)
 
                     heapq.heappush(
                         self._event_queue,
@@ -73,37 +75,56 @@ class EventProcessor(metaclass=PySingleton):
                         ),
                     )
 
+        elif e.type == pygame.TEXTINPUT:
+
+            for f in self._registered_events:
+
+                if f._type == EVENT.TEXT:
+
+                    r_f = copy.copy(f)
+                    cast(TextEvent, r_f).text = e.text
+
+                    heapq.heappush(
+                        self._event_queue,
+                        (
+                            time.time(),
+                            r_f,
+                        ),
+                    )
+
+        else:
+            print(pygame.event.event_name(e.type))
+
     def _process_event(self, e: Event) -> None:
 
-        keys: Tuple[int]
+        keys: Sequence[bool]
 
         if e in self._unregistered_events:
             return
 
         if e._type == EVENT.KEY:
 
-            if cast(KeyEvent, e)._pressed and cast(KeyEvent, e)._repeat > 0:
+            if cast(KeyEvent, e).pressed and cast(KeyEvent, e).repeat > 0:
 
                 keys = pygame.key.get_pressed()
 
                 if (
-                    cast(KeyEvent, e)._mod == 0
-                    and not bool(keys[cast(KeyEvent, e)._key])
+                    cast(KeyEvent, e).mod == 0 and not bool(keys[cast(KeyEvent, e).key])
                 ) or (
-                    cast(KeyEvent, e)._mod != 0
+                    cast(KeyEvent, e).mod != 0
                     and (
-                        pygame.key.get_mods() & cast(KeyEvent, e)._mod
-                        != cast(KeyEvent, e)._mod
-                        or not bool(keys[cast(KeyEvent, e)._key])
+                        pygame.key.get_mods() & cast(KeyEvent, e).mod
+                        != cast(KeyEvent, e).mod
+                        or not bool(keys[cast(KeyEvent, e).key])
                     )
                 ):
                     return
 
-            if cast(KeyEvent, e)._repeat > 0 and cast(KeyEvent, e)._pressed:
+            if cast(KeyEvent, e).repeat > 0 and cast(KeyEvent, e).pressed:
                 heapq.heappush(
                     self._event_queue,
                     (
-                        time.time() + cast(KeyEvent, e)._repeat,
+                        time.time() + cast(KeyEvent, e).repeat,
                         e,
                     ),
                 )
@@ -119,9 +140,9 @@ class EventProcessor(metaclass=PySingleton):
 
     def process(self) -> None:
 
-        e: pygame.event.EventType
+        e: pygame.event.Event
         f: Event
-        events: List[pygame.event.EventType]
+        events: List[pygame.event.Event]
 
         try:
             events = pygame.event.get()
@@ -260,19 +281,6 @@ class EventProcessor(metaclass=PySingleton):
             ):
                 self._unregistered_events.append(f)
 
-    def remove_all_key_events(self) -> None:
-        """
-        discards all key events
-        """
-
-        events: List[Event] = [
-            f
-            for f in self._registered_events
-            if f not in self._unregistered_events and (f._type == EVENT.KEY)
-        ]
-
-        self._unregistered_events = self._unregistered_events + events
-
     def add_schedule_event(
         self, delay: float, function: Callable[..., None], *args: Any, **kwargs: Any
     ) -> None:
@@ -302,3 +310,58 @@ class EventProcessor(metaclass=PySingleton):
             self._event_queue,
             (time.time() + delay, ScheduleEvent(function, *args, **kwargs)),
         )
+
+    def add_text_event(
+        self, function: TextEventCallback, *args: Any, **kwargs: Any
+    ) -> None:
+        """
+        registers a callback function that gets called whenever text is entered.
+
+        Parameters
+        ----------
+        function
+
+            a callback function that receives the entered text as parameter in
+            addition to the custom arguments provided to this function
+
+        args
+
+            these positional arguments will be passed to the callback function
+
+        kwargs
+
+            these keyword arguments will be passed to the callback function
+        """
+
+        if self._text_event_count == 0:
+            pygame.key.start_text_input()
+
+        self._registered_events.append(TextEvent(function, *args, **kwargs))
+        self._text_event_count += 1
+
+    def remove_text_event(self, function: TextEventCallback) -> None:
+        """
+        removes a callback function previously registered with
+        :meth:`~pyage.event_processor.EventProcessor.add_text_event`
+
+        Parameters
+        ----------
+        function
+
+            the callback function
+        """
+
+        f: Event
+
+        for f in self._registered_events:
+            if (
+                f not in self._unregistered_events
+                and f._type == EVENT.TEXT
+                and f._function == function
+            ):
+                self._unregistered_events.append(f)
+                self._text_event_count -= 1
+
+                if self._text_event_count <= 0:
+                    self._text_event_count = 0
+                    pygame.key.stop_text_input()

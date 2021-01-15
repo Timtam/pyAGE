@@ -6,18 +6,14 @@ from pyage.event import Event
 
 class FocusEvent(Event):
 
-    _gain: bool
+    gain: bool
 
     def __init__(self, function: Callable[[bool], None], gain: bool = False) -> None:
 
-        Event.__init__(self, type=EVENT.FOCUS, function=function)
+        super().__init__(type=EVENT.FOCUS, function=function)
 
-        self._gain = gain
-
-    @property
-    def gain(self) -> bool:
-        return self._gain
+        self.gain = gain
 
     def __call__(self) -> None:
 
-        self._function(self._gain)
+        self._function(self.gain)

@@ -132,3 +132,10 @@ Button
 .. autoclass:: pyage.screens.items.button.Button
    :inherited-members:
 
+
+TextInput
+~~~~~~~~~
+
+.. autoclass:: pyage.screens.items.text_input.TextInput
+   :inherited-members:
+

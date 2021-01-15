@@ -9,6 +9,7 @@ class EVENT(IntEnum):
     KEY = auto()
     FOCUS = auto()
     SCHEDULE = auto()
+    TEXT = auto()
 
 
 class KEY(IntEnum):

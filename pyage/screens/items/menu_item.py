@@ -4,6 +4,7 @@ from typing import Callable, List
 from pyage.constants import KEY, MOD
 from pyage.event_processor import EventProcessor
 from pyage.events.key import KeyEvent
+from pyage.output import output
 
 
 class MenuItem(ABC):
@@ -12,13 +13,21 @@ class MenuItem(ABC):
     item that can be used together with the :class:`pyage.screens.menu.Menu`
     screen. You'll need to inherit this class when creating your own type of
     menu items.
+
+    Parameters
+    ----------
+    label
+
+        the text to read when selecting this item
     """
 
     _keys: List[KeyEvent]
+    label: str
 
-    def __init__(self) -> None:
+    def __init__(self, label: str) -> None:
 
         self._keys = []
+        self.label = label
 
     def add_key_event(
         self,
@@ -66,6 +75,8 @@ class MenuItem(ABC):
         e: KeyEvent
         ev: EventProcessor = EventProcessor()
 
+        self.announce()
+
         for e in self._keys:
             ev.add_key_event(
                 key=e._key,
@@ -84,3 +95,12 @@ class MenuItem(ABC):
 
         for e in self._keys:
             ev.remove_key_event(key=e._key, mod=e._mod)
+
+    def announce(self) -> None:
+        """
+        This method is responsible for speaking the announcement when
+        selecting this item. It will only speak the label of the item by
+        default, but it can be overridden to modify this behaviour.
+        """
+
+        output(self.label)
