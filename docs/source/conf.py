@@ -103,3 +103,5 @@ intersphinx_mapping = {
 
 
 napoleon_use_param = True
+
+autodoc_mock_imports = ["synthizer", "cytolk"]

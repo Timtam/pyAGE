@@ -1,4 +1,11 @@
+import os.path
+
 from setuptools import find_packages, setup
+
+requirements_file = os.path.join(os.path.dirname(__file__), "requirements.txt")
+
+with open(requirements_file, "r") as f:
+    requirements = f.read()
 
 setup(
     name="pyAGE",
@@ -7,13 +14,5 @@ setup(
     author_email="software@satoprogs.de",
     url="https://github.com/Timtam/pyAGE",
     packages=find_packages(),
-    setup_requires=[
-        "flake8",
-    ],
-    install_requires=[
-        "cytolk==0.1.3",
-        "pygame==2.0.0-dev12",
-        "python-singleton-metaclasses==0.1.0",
-        "synthizer==0.7.3",
-    ],
+    install_requires=requirements.split("\r\n"),
 )
