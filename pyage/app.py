@@ -195,15 +195,15 @@ class App(metaclass=PySingleton):
         if not title:
             title = self.window_title
 
-        import Tkinter
-        import tkMessageBox
+        import tkinter
+        from tkinter import messagebox
 
         try:
-            tkscreen = Tkinter.Tk()
+            tkscreen = tkinter.Tk()
             tkscreen.wm_withdraw()
-            tkMessageBox.showinfo(title, message)
+            messagebox.showinfo(title, message)
             tkscreen.destroy()
-        except Tkinter._tkinter.TclError:
+        except tkinter.TclError:
             print(
                 "Unable to initialize a message box to output the following message:\n\ttitle: %s\n\tmessage: %s"
                 % (title, message)
