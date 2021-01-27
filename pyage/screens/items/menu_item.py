@@ -5,6 +5,8 @@ from pyage.constants import KEY, MOD
 from pyage.event_processor import EventProcessor
 from pyage.events.key import KeyEvent
 from pyage.output import output
+from pyage.sound_bank import SoundBank
+from pyage.sound_player import SoundPlayer
 
 
 class MenuItem(ABC):
@@ -39,15 +41,17 @@ class MenuItem(ABC):
     """
 
     _keys: List[KeyEvent]
+    _sound_player: SoundPlayer
 
     label: str
-    selected_sound: str
+    select_sound: str
 
-    def __init__(self, label: str, selected_sound: str = "") -> None:
+    def __init__(self, label: str, select_sound: str = "") -> None:
 
         self._keys = []
+        self._sound_player = SoundBank().create_sound_player()
         self.label = label
-        self.selected_sound = selected_sound
+        self.select_sound = select_sound
 
     def add_key_event(
         self,
@@ -87,7 +91,7 @@ class MenuItem(ABC):
         if e not in self._keys:
             self._keys.append(e)
 
-    def selected(self) -> None:
+    def select(self) -> None:
         """
         This method will be called whenever this item gets selected.
         """
@@ -105,7 +109,7 @@ class MenuItem(ABC):
                 repeat=e._repeat,
             )
 
-    def deselected(self) -> None:
+    def deselect(self) -> None:
         """
         This method will be called whenever this item gets deselected within the menu.
         """
@@ -124,3 +128,11 @@ class MenuItem(ABC):
         """
 
         output(self.label)
+
+    @property
+    def sound_player(self) -> SoundPlayer:
+        """
+        a :class:`~pyage.sound_player.SoundPlayer` instance which can be used
+        to play sounds.
+        """
+        return self._sound_player

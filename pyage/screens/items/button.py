@@ -1,6 +1,7 @@
-from typing import Any, Callable
+from typing import Any, Callable, Optional
 
 from pyage.constants import KEY
+from pyage.sound import Sound
 
 from .menu_item import MenuItem
 
@@ -22,30 +23,53 @@ class Button(MenuItem):
         a function which gets called when pressing return while the button is
         selected.
 
-    selected_sound
+    select_sound
 
         the sound to play when selecting this item. This setting overrides the
         menu's :attr:`~pyage.screens.menu.Menu.selected_sound` setting when set.
+
+    submit_sound
+
+        a sound to play when hitting the button.
+
+    Attributes
+    ----------
+
+    submit_sound
+
+        a sound to play when hitting the button.
     """
 
     _function: Any  # not yet supported by mypy
+
+    submit_sound: str
 
     def __init__(
         self,
         label: str,
         function: Callable[[], None] = lambda: None,
-        selected_sound: str = "",
+        select_sound: str = "",
+        submit_sound: str = "",
     ) -> None:
 
-        super().__init__(label=label, selected_sound=selected_sound)
+        super().__init__(label=label, select_sound=select_sound)
 
         self._function = function
+        self.submit_sound = submit_sound
 
         self.add_key_event(key=KEY.RETURN, function=self.submit)
 
     def submit(self, pressed: bool) -> None:
 
+        snd: Optional[Sound] = None
+
         if not pressed:
             return
+
+        if self.submit_sound != "":
+            snd = self.sound_player.get(self.select_sound)
+
+        if snd:
+            snd.play()
 
         self._function()

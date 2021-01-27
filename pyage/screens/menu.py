@@ -32,7 +32,7 @@ class Menu(Screen):
         does the menu wrap (pressing up or down arrow when on the edge of
         the menu will reset the cursor to the opposite end of the menu)?
 
-    selected_sound
+    select_sound
 
         a sound to play when selecting an item. This is overriden by the
         selected item's :attr:`~pyage.screens.items.menu_item.selected_sound`
@@ -41,7 +41,7 @@ class Menu(Screen):
     Attributes
     ----------
 
-    selected_sound
+    select_sound
 
         a sound to play when selecting an item. This is overriden by the
         selected item's :attr:`~pyage.screens.items.menu_item.selected_sound`
@@ -56,18 +56,18 @@ class Menu(Screen):
     _item_index: int
     _items: List[MenuItem]
 
-    selected_sound: str
+    select_sound: str
     wrap: bool
 
     def __init__(
-        self, items: List[MenuItem] = [], wrap: bool = False, selected_sound: str = ""
+        self, items: List[MenuItem] = [], wrap: bool = False, select_sound: str = ""
     ) -> None:
 
         super().__init__()
 
         self._item_index = 0
         self._items = items
-        self.selected_sound = selected_sound
+        self.select_sound = select_sound
         self.wrap = wrap
 
         self.add_key_event(key=KEY.UP, function=self.select_previous_item)
@@ -78,7 +78,7 @@ class Menu(Screen):
         super().shown(pushed)
 
         try:
-            self._items[self._item_index].selected()
+            self._items[self._item_index].select()
         except IndexError:
             pass
 
@@ -87,7 +87,7 @@ class Menu(Screen):
         super().hidden(popped)
 
         try:
-            self._items[self._item_index].deselected()
+            self._items[self._item_index].deselect()
         except IndexError:
             pass
 
@@ -114,22 +114,22 @@ class Menu(Screen):
         if self._item_index == 0 and not self.wrap:
             return
 
-        self._items[self._item_index].deselected()
+        self._items[self._item_index].deselect()
 
         self._item_index -= 1
 
         if self._item_index < 0:
             self._item_index = len(self._items) - 1
 
-        if self._items[self._item_index].selected_sound != "":
-            snd = self.sound_player.get(self._items[self._item_index].selected_sound)
-        elif self.selected_sound != "":
-            snd = self.sound_player.get(self.selected_sound)
+        if self._items[self._item_index].select_sound != "":
+            snd = self.sound_player.get(self._items[self._item_index].select_sound)
+        elif self.select_sound != "":
+            snd = self.sound_player.get(self.select_sound)
 
         if snd:
             snd.play()
 
-        self._items[self._item_index].selected()
+        self._items[self._item_index].select()
 
     def select_next_item(self, pressed: bool) -> None:
 
@@ -141,19 +141,19 @@ class Menu(Screen):
         if len(self._items) <= self._item_index + 1 and not self.wrap:
             return
 
-        self._items[self._item_index].deselected()
+        self._items[self._item_index].deselect()
 
         self._item_index += 1
 
         if self._item_index >= len(self._items):
             self._item_index = 0
 
-        if self._items[self._item_index].selected_sound != "":
-            snd = self.sound_player.get(self._items[self._item_index].selected_sound)
-        elif self.selected_sound != "":
-            snd = self.sound_player.get(self.selected_sound)
+        if self._items[self._item_index].select_sound != "":
+            snd = self.sound_player.get(self._items[self._item_index].select_sound)
+        elif self.select_sound != "":
+            snd = self.sound_player.get(self.select_sound)
 
         if snd:
             snd.play()
 
-        self._items[self._item_index].selected()
+        self._items[self._item_index].select()

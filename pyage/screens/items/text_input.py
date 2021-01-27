@@ -23,7 +23,7 @@ class TextInput(MenuItem):
 
         the pre-filled text for this input field
 
-    selected_sound
+    select_sound
 
         the sound to play when selecting this item. This setting overrides the
         menu's :attr:`~pyage.screens.menu.Menu.selected_sound` setting when set.
@@ -38,9 +38,9 @@ class TextInput(MenuItem):
     _cursor: int
     text: str
 
-    def __init__(self, label: str, text: str = "", selected_sound: str = "") -> None:
+    def __init__(self, label: str, text: str = "", select_sound: str = "") -> None:
 
-        super().__init__(label=label, selected_sound=selected_sound)
+        super().__init__(label=label, select_sound=select_sound)
 
         self.text = text
         self.cursor = 0
@@ -50,17 +50,17 @@ class TextInput(MenuItem):
         self.add_key_event(key=KEY.RIGHT, function=self.cursorRight)
         self.add_key_event(key=KEY.DELETE, function=self.deleteCurrent)
 
-    def selected(self) -> None:
+    def select(self) -> None:
 
-        super().selected()
+        super().select()
 
         ev: EventProcessor = EventProcessor()
 
         ev.add_text_event(self.receiveText)
 
-    def deselected(self) -> None:
+    def deselect(self) -> None:
 
-        super().deselected()
+        super().deselect()
 
         ev: EventProcessor = EventProcessor()
 
