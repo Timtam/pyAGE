@@ -1,32 +1,35 @@
 from abc import ABC
 from typing import TYPE_CHECKING, List, Optional, cast
 
+import pyage.app
+import pyage.sound_bank
+
 from .sound import Sound
 from .sound_buffer import SoundBuffer
 
 if TYPE_CHECKING:
-    from .app import App
     from .audio_backend import AudioBackend
 
 
 class SoundPlayer(ABC):
 
-    _app: "App"
     _sounds: List[Sound]
 
-    def __init__(self, app: "App") -> None:
+    def __init__(self) -> None:
 
-        self._app = app
         self._sounds = []
 
     def get(self, snd: str) -> Optional[Sound]:
 
-        if snd not in self._app._sound_bank:
+        app: pyage.app.App = pyage.app.App()
+        bank: pyage.sound_bank.SoundBank = pyage.sound_bank.SoundBank()
+
+        if snd not in bank:
             return None
 
-        buffer: SoundBuffer = self._app._sound_bank[snd]
+        buffer: SoundBuffer = bank[snd]
 
-        sound: Sound = cast("AudioBackend", self._app._audio_backend).create_sound(
+        sound: Sound = cast("AudioBackend", app._audio_backend).create_sound(
             buffer=buffer
         )
 

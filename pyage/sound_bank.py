@@ -4,6 +4,8 @@ import warnings
 from pathlib import Path
 from typing import Dict, Generator, List, Optional, Union, cast
 
+from pysingleton import PySingleton
+
 import pyage.app
 
 from .audio_backend import AudioBackend
@@ -12,7 +14,7 @@ from .sound_buffer import SoundBuffer
 from .sound_player import SoundPlayer
 
 
-class SoundBank:
+class SoundBank(metaclass=PySingleton):
     """
     The sound bank allows you to load sound buffers via the
     :meth:`~pyage.sound_bank.SoundBank.load` method, after which you can access
@@ -31,14 +33,12 @@ class SoundBank:
     a look into the useful tools this class can offer you.
     """
 
-    _app: "pyage.app.App"
     _buffers: Dict[str, SoundBuffer]
     _file_extension: str = ".ogg"
     _source_path: Path
 
-    def __init__(self, app: "pyage.app.App") -> None:
+    def __init__(self) -> None:
 
-        self._app = app
         self._buffers = {}
         self._source_path = Path(".").resolve()
 
@@ -150,10 +150,11 @@ class SoundBank:
             the amount of sounds loaded
         """
 
+        app: pyage.app.App = pyage.app.App()
         buffer: SoundBuffer
         exc: AudioLoadError
-        p: Path
         loaded: int = 0
+        p: Path
 
         found: Generator[Path, None, None] = self._source_path.glob(
             snd + self._file_extension
@@ -166,9 +167,9 @@ class SoundBank:
 
             try:
 
-                buffer = cast(
-                    AudioBackend, self._app._audio_backend
-                ).create_sound_buffer(str(p.resolve()))
+                buffer = cast(AudioBackend, app._audio_backend).create_sound_buffer(
+                    str(p.resolve())
+                )
 
                 self._buffers[str(p.resolve())] = buffer
 
@@ -204,7 +205,7 @@ class SoundBank:
         create a sound player which is needed to play and manage sounds
         """
 
-        return SoundPlayer(self._app)
+        return SoundPlayer()
 
     def get(self, snd: str) -> Optional[SoundBuffer]:
         """

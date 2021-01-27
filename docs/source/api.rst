@@ -23,13 +23,15 @@ game in general. This class is documented as follows:
 ScreenStack: changing scenes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-By accessing the :class:`~pyage.screen_stack.ScreenStack` instance through 
-:attr:`pyage.app.App.screen_stack`, you can 
+By accessing the :class:`~pyage.screen_stack.ScreenStack` instance, you can 
 :meth:`~pyage.screen_stack.ScreenStack.push` new screens on top of the screen 
 stack or :meth:`~pyage.screen_stack.ScreenStack.pop` unwanted screens from the 
 top of the screen stack at any time. The top-most screen will receive all 
 events the game has to offer, including :class:`~pyage.events.focus.FocusEvent` 
 and :class:`~pyage.events.key.KeyEvent`.
+
+Please note that :class:`pyage.screen_stack.ScreenStack` is a singleton class, thus you
+can import and initialize this class at any time to get access to it.
 
 .. autoclass:: pyage.screen_stack.ScreenStack
    :inherited-members:
@@ -74,6 +76,9 @@ allows access to the several underlying buffers in order to create a new sound.
 The remaining parts of the sound system will be discussed in the specific 
 :ref:`chapter <sound-system>`, but the :class:`pyage.sound_bank.SoundBank` 
 class will be listed here.
+
+Please note that :class:`pyage.sound_bank.SoundBank` is a singleton class, thus you
+can import and initialize this class at any time to get access to it.
 
 .. autoclass:: pyage.sound_bank.SoundBank
    :inherited-members:

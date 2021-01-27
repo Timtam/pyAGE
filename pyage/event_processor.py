@@ -92,9 +92,6 @@ class EventProcessor(metaclass=PySingleton):
                         ),
                     )
 
-        else:
-            print(pygame.event.event_name(e.type))
-
     def _process_event(self, e: Event) -> None:
 
         keys: Sequence[bool]

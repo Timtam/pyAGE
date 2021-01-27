@@ -1,18 +1,13 @@
 from typing import List
 
-import pyage.app
+from pysingleton import PySingleton
 
 from .screen import Screen
 
 
-class ScreenStack:
+class ScreenStack(metaclass=PySingleton):
 
-    _app: "pyage.app.App"
     _screen_stack: List[Screen] = []
-
-    def __init__(self, app: "pyage.app.App") -> None:
-
-        self._app = app
 
     def push(self, screen: Screen) -> None:
         """

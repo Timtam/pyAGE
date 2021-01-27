@@ -31,14 +31,7 @@ class App(metaclass=PySingleton):
     _fps: int
     _output_backend: Optional[OutputBackend] = None
     _quit: bool = False
-    _screen_stack: ScreenStack
-    _sound_bank: SoundBank
     _title: str = ""
-
-    def __init__(self) -> None:
-
-        self._screen_stack = ScreenStack(self)
-        self._sound_bank = SoundBank(self)
 
     def show(
         self,
@@ -133,6 +126,7 @@ class App(metaclass=PySingleton):
         """
 
         clock: pygame.time.Clock = pygame.time.Clock()
+        stack: ScreenStack = ScreenStack()
 
         while not self._quit:
 
@@ -145,7 +139,7 @@ class App(metaclass=PySingleton):
                 if self._quit:
                     break
 
-                self._screen_stack.update(clock.get_time() / 1000)
+                stack.update(clock.get_time() / 1000)
 
                 if fn:
                     fn(self, clock.get_time() / 1000)
@@ -160,10 +154,10 @@ class App(metaclass=PySingleton):
                     traceback.format_exc(),
                 )
 
-        while self._screen_stack.pop():
+        while stack.pop():
             pass
 
-        self._sound_bank.unload_all()
+        SoundBank().unload_all()
         pygame.display.quit()
 
     @property
@@ -219,29 +213,9 @@ class App(metaclass=PySingleton):
         return self._output_backend
 
     @property
-    def screen_stack(self) -> ScreenStack:
-        """
-        The screen stack which cares for all your different screens and which
-        forwards all events to the relevant screen(s). You need to access that
-        in order to push or pop screens.
-        """
-
-        return self._screen_stack
-
-    @property
     def audio_backend(self) -> Optional[AudioBackend]:
         """
         The audio backend used by pyAGE.
         """
 
         return self._audio_backend
-
-    @property
-    def sound_bank(self) -> SoundBank:
-        """
-        The entrypoint for all sound-related functionality built into pyage.
-        Create sounds and sound players, as well as caching your sounds will
-        all be done there.
-        """
-
-        return self._sound_bank

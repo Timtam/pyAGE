@@ -1,7 +1,7 @@
 from abc import ABC
 from typing import Callable, List
 
-import pyage.app
+import pyage.sound_bank
 
 from .constants import KEY, MOD
 from .event_processor import EventProcessor
@@ -18,7 +18,7 @@ class Screen(ABC):
     def __init__(self) -> None:
 
         self._keys = []
-        self._sound_player = pyage.app.App().sound_bank.create_sound_player()
+        self._sound_player = pyage.sound_bank.SoundBank().create_sound_player()
 
     def add_key_event(
         self,
