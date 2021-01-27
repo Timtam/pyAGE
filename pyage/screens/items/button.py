@@ -21,13 +21,23 @@ class Button(MenuItem):
 
         a function which gets called when pressing return while the button is
         selected.
+
+    selected_sound
+
+        the sound to play when selecting this item. This setting overrides the
+        menu's :attr:`~pyage.screens.menu.Menu.selected_sound` setting when set.
     """
 
     _function: Any  # not yet supported by mypy
 
-    def __init__(self, label: str, function: Callable[[], None] = lambda: None) -> None:
+    def __init__(
+        self,
+        label: str,
+        function: Callable[[], None] = lambda: None,
+        selected_sound: str = "",
+    ) -> None:
 
-        super().__init__(label=label)
+        super().__init__(label=label, selected_sound=selected_sound)
 
         self._function = function
 
