@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, cast
 
 import synthizer
 
@@ -20,3 +20,6 @@ class SynthizerSoundBuffer(SoundBuffer):
                 self._buffer.destroy()
             except synthizer.SynthizerError:
                 pass
+
+    def get_length(self) -> float:
+        return cast(synthizer.Buffer, self._buffer).get_length_in_seconds()
