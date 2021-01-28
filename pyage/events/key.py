@@ -1,10 +1,11 @@
-from typing import Any, Callable
+from typing import Any
 
 from pyage.constants import EVENT, KEY, MOD
 from pyage.event import Event
+from pyage.types import KeyEventCallback
 
 
-class KeyEvent(Event):
+class KeyEvent(Event[KeyEventCallback]):
 
     _key: KEY
     _mod: MOD
@@ -13,14 +14,15 @@ class KeyEvent(Event):
 
     def __init__(
         self,
-        function: Callable[[bool], None],
+        function: KeyEventCallback,
         key: KEY,
         mod: MOD,
         repeat: float = 0.0,
         pressed: bool = True,
+        userdata: Any = None,
     ) -> None:
 
-        super().__init__(type=EVENT.KEY, function=function)
+        super().__init__(type=EVENT.KEY, function=function, userdata=userdata)
 
         self._key = key
         self._mod = mod
@@ -36,7 +38,7 @@ class KeyEvent(Event):
                 and self._function == other._function
             )
 
-        return False
+        return NotImplemented
 
     @property
     def key(self) -> KEY:
@@ -50,6 +52,5 @@ class KeyEvent(Event):
     def repeat(self) -> float:
         return self._repeat
 
-    def __call__(self) -> None:
-
-        self._function(self.pressed)
+    def call_callback(self, function: KeyEventCallback) -> None:
+        function(self.pressed, self._userdata)

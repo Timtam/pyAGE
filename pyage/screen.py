@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Callable, List
+from typing import Any, List
 
 import pyage.sound_bank
 
@@ -7,6 +7,7 @@ from .constants import KEY, MOD
 from .event_processor import EventProcessor
 from .events.key import KeyEvent
 from .sound_player import SoundPlayer
+from .types import KeyEventCallback
 
 
 class Screen(ABC):
@@ -22,10 +23,11 @@ class Screen(ABC):
 
     def add_key_event(
         self,
-        function: Callable[[bool], None],
+        function: KeyEventCallback,
         key: KEY,
         mod: MOD = MOD.NONE,
         repeat: float = 0.0,
+        userdata: Any = None,
     ) -> None:
         """
         This function allows you to register keystrokes to this screen. Unlike
@@ -40,15 +42,19 @@ class Screen(ABC):
         ----------
         function
 
-            a function that receives :obj:`True` when the key was pressed or :obj:`False` if it was released
+            a function that receives :obj:`True` when the key was pressed or
+            :obj:`False` if it was released, in addition to optional arguments
+            (see below).
 
         key
 
-            one of the several constants from the :class:`pyage.constants.KEY` enumeration
+            one of the several constants from the :class:`pyage.constants.KEY`
+            enumeration
 
         mod
 
-            one of :class:`pyage.constants.MOD` constants (default :attr:`pyage.constants.MOD.NONE`)
+            one of :class:`pyage.constants.MOD` constants (default
+            :attr:`pyage.constants.MOD.NONE`)
 
         repeat
 
@@ -57,9 +63,15 @@ class Screen(ABC):
             example be used to take one step for every 0.2 seconds that passed
             while the key is hold down. Default is 0, which will only raise
             the event when the key gets pressed and released.
+
+        userdata
+
+            userdata which will be passed to the callback
         """
 
-        e: KeyEvent = KeyEvent(key=key, function=function, mod=mod, repeat=repeat)
+        e: KeyEvent = KeyEvent(
+            key=key, function=function, mod=mod, repeat=repeat, userdata=userdata
+        )
 
         if e not in self._keys:
             self._keys.append(e)
@@ -84,10 +96,11 @@ class Screen(ABC):
 
         for e in self._keys:
             self._event_processor.add_key_event(
-                key=e._key,
-                function=e._function,
-                mod=e._mod,
-                repeat=e._repeat,
+                key=e.key,
+                function=e.function,
+                mod=e.mod,
+                repeat=e.repeat,
+                userdata=e.userdata,
             )
 
     def hidden(self, popped: bool) -> None:

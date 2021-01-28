@@ -1,19 +1,21 @@
-from typing import Callable
+from typing import Any
 
 from pyage.constants import EVENT
 from pyage.event import Event
+from pyage.types import FocusEventCallback
 
 
-class FocusEvent(Event):
+class FocusEvent(Event[FocusEventCallback]):
 
     gain: bool
 
-    def __init__(self, function: Callable[[bool], None], gain: bool = False) -> None:
+    def __init__(
+        self, function: FocusEventCallback, gain: bool = False, userdata: Any = None
+    ) -> None:
 
-        super().__init__(type=EVENT.FOCUS, function=function)
+        super().__init__(type=EVENT.FOCUS, function=function, userdata=userdata)
 
         self.gain = gain
 
-    def __call__(self) -> None:
-
-        self._function(self.gain)
+    def call_callback(self, function: FocusEventCallback) -> None:
+        function(self.gain, self._userdata)

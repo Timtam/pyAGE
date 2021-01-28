@@ -59,7 +59,7 @@ class Button(MenuItem):
 
         self.add_key_event(key=KEY.RETURN, function=self.submit)
 
-    def submit(self, pressed: bool) -> None:
+    def submit(self, pressed: bool, userdata: Any) -> None:
 
         snd: Optional[Sound] = None
 

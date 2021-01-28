@@ -2,7 +2,7 @@ import copy
 import heapq
 import time
 import traceback
-from typing import Any, Callable, List, Optional, Sequence, Tuple, cast
+from typing import Any, List, Optional, Sequence, Tuple, cast
 
 import pygame
 from pysingleton import PySingleton
@@ -12,7 +12,13 @@ from pyage.event import Event
 from pyage.events.focus import FocusEvent
 from pyage.events.key import KeyEvent
 from pyage.events.schedule import ScheduleEvent
-from pyage.events.text import TextEvent, TextEventCallback
+from pyage.events.text import TextEvent
+from pyage.types import (
+    FocusEventCallback,
+    KeyEventCallback,
+    ScheduleEventCallback,
+    TextEventCallback,
+)
 
 
 class EventProcessor(metaclass=PySingleton):
@@ -33,7 +39,7 @@ class EventProcessor(metaclass=PySingleton):
                 f = next(
                     r_f
                     for r_f in self._registered_events
-                    if r_f._type == EVENT.KEY
+                    if r_f.type == EVENT.KEY
                     and cast(KeyEvent, r_f).key == e.key
                     and e.mod & cast(KeyEvent, r_f).mod == cast(KeyEvent, r_f).mod
                 )
@@ -62,7 +68,7 @@ class EventProcessor(metaclass=PySingleton):
 
             for f in self._registered_events:
 
-                if f._type == EVENT.FOCUS:
+                if f.type == EVENT.FOCUS:
 
                     r_f = copy.copy(f)
                     cast(FocusEvent, r_f).gain = bool(e.gain)
@@ -79,7 +85,7 @@ class EventProcessor(metaclass=PySingleton):
 
             for f in self._registered_events:
 
-                if f._type == EVENT.TEXT:
+                if f.type == EVENT.TEXT:
 
                     r_f = copy.copy(f)
                     cast(TextEvent, r_f).text = e.text
@@ -99,7 +105,7 @@ class EventProcessor(metaclass=PySingleton):
         if e in self._unregistered_events:
             return
 
-        if e._type == EVENT.KEY:
+        if e.type == EVENT.KEY:
 
             if cast(KeyEvent, e).pressed and cast(KeyEvent, e).repeat > 0:
 
@@ -177,10 +183,11 @@ class EventProcessor(metaclass=PySingleton):
 
     def add_key_event(
         self,
-        function: Callable[[bool], None],
+        function: KeyEventCallback,
         key: KEY,
         mod: MOD = MOD.NONE,
         repeat: float = 0.0,
+        userdata: Any = None,
     ) -> None:
         """
         registers a callback which gets called whenever the specified key is pressed
@@ -189,7 +196,9 @@ class EventProcessor(metaclass=PySingleton):
         ----------
         function
 
-            a function that receives :obj:`True` when the key was pressed or :obj:`False` if it was released
+            a function that receives :obj:`True` when the key was pressed or
+            :obj:`False` if it was released as first argument, and the provided
+            userdata as second parameter
 
         key
 
@@ -206,13 +215,21 @@ class EventProcessor(metaclass=PySingleton):
             example be used to take one step for every 0.2 seconds that passed
             while the key is hold down. Default is 0, which will only raise
             the event when the key gets pressed and released.
+
+        userdata
+
+            data which will be passed to the registered function
         """
 
         self._registered_events.append(
-            KeyEvent(function=function, key=key, mod=mod, repeat=repeat)
+            KeyEvent(
+                function=function, key=key, mod=mod, repeat=repeat, userdata=userdata
+            )
         )
 
-    def add_focus_event(self, function: Callable[[bool], None]) -> None:
+    def add_focus_event(
+        self, function: FocusEventCallback, userdata: Any = None
+    ) -> None:
         """
         registers a callback that gets called whenever the pyAGE app loses or
         receives focus. Can be used to pause a game or silence sounds when the
@@ -223,10 +240,15 @@ class EventProcessor(metaclass=PySingleton):
         function
 
             a callback that will receive :obj:`True` as argument when the app
-            receives focus or :obj:`False` when it loses focus.
+            receives focus or :obj:`False` when it loses focus as first
+            parameter, and the userdata as second parameter.
+
+        userdata
+
+            userdata which will be passed to the callback
         """
 
-        self._registered_events.append(FocusEvent(function))
+        self._registered_events.append(FocusEvent(function=function, userdata=userdata))
 
     def remove_key_event(self, key: KEY, mod: MOD = MOD.NONE) -> None:
         """
@@ -250,13 +272,13 @@ class EventProcessor(metaclass=PySingleton):
         for f in self._registered_events:
             if (
                 f not in self._unregistered_events
-                and f._type == EVENT.KEY
+                and f.type == EVENT.KEY
                 and cast(KeyEvent, f)._key == key
                 and cast(KeyEvent, f)._mod == mod
             ):
                 self._unregistered_events.append(f)
 
-    def remove_focus_event(self, function: Callable[[bool], None]) -> None:
+    def remove_focus_event(self, function: FocusEventCallback) -> None:
         """
         removes a previously registered focus callback
 
@@ -273,13 +295,13 @@ class EventProcessor(metaclass=PySingleton):
         for f in self._registered_events:
             if (
                 f not in self._unregistered_events
-                and f._type == EVENT.FOCUS
-                and f._function == function
+                and f.type == EVENT.FOCUS
+                and f.function == function
             ):
                 self._unregistered_events.append(f)
 
     def add_schedule_event(
-        self, delay: float, function: Callable[..., None], *args: Any, **kwargs: Any
+        self, delay: float, function: ScheduleEventCallback, userdata: Any = None
     ) -> None:
         """
         registers a callback that gets called after a given period of time
@@ -292,24 +314,22 @@ class EventProcessor(metaclass=PySingleton):
 
         function
 
-            any callback without specific parameters
+            a callback accepting only the userdata as parameter.
 
-        args
+        userdata
 
-            arguments that will be passed to the callback
-
-        kwargs
-
-            keyword arguments that will be passed to the callback
+            userdata which will be passed to the callback
         """
 
         heapq.heappush(
             self._event_queue,
-            (time.time() + delay, ScheduleEvent(function, *args, **kwargs)),
+            (time.time() + delay, ScheduleEvent(function=function, userdata=userdata)),
         )
 
     def add_text_event(
-        self, function: TextEventCallback, *args: Any, **kwargs: Any
+        self,
+        function: TextEventCallback,
+        userdata: Any = None,
     ) -> None:
         """
         registers a callback function that gets called whenever text is entered.
@@ -318,22 +338,18 @@ class EventProcessor(metaclass=PySingleton):
         ----------
         function
 
-            a callback function that receives the entered text as parameter in
-            addition to the custom arguments provided to this function
+            a callback function that receives the entered text as first
+            parameter and the userdata as second parameter.
 
-        args
+        userdata
 
-            these positional arguments will be passed to the callback function
-
-        kwargs
-
-            these keyword arguments will be passed to the callback function
+            userdata which will be passed to the function
         """
 
         if self._text_event_count == 0:
             pygame.key.start_text_input()
 
-        self._registered_events.append(TextEvent(function, *args, **kwargs))
+        self._registered_events.append(TextEvent(function=function, userdata=userdata))
         self._text_event_count += 1
 
     def remove_text_event(self, function: TextEventCallback) -> None:
@@ -353,8 +369,8 @@ class EventProcessor(metaclass=PySingleton):
         for f in self._registered_events:
             if (
                 f not in self._unregistered_events
-                and f._type == EVENT.TEXT
-                and f._function == function
+                and f.type == EVENT.TEXT
+                and f.function == function
             ):
                 self._unregistered_events.append(f)
                 self._text_event_count -= 1

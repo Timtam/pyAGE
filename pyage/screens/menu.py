@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Any, List, Optional
 
 from pyage.constants import KEY
 from pyage.screen import Screen
@@ -104,7 +104,7 @@ class Menu(Screen):
 
         self._items.append(item)
 
-    def select_previous_item(self, pressed: bool) -> None:
+    def select_previous_item(self, pressed: bool, userdata: Any) -> None:
 
         snd: Optional[Sound] = None
 
@@ -131,7 +131,7 @@ class Menu(Screen):
 
         self._items[self._item_index].select()
 
-    def select_next_item(self, pressed: bool) -> None:
+    def select_next_item(self, pressed: bool, userdata: Any) -> None:
 
         snd: Optional[Sound] = None
 

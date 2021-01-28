@@ -1,23 +1,14 @@
-from typing import Any, Callable, Dict, Tuple
+from typing import Any
 
 from pyage.constants import EVENT
 from pyage.event import Event
+from pyage.types import ScheduleEventCallback
 
 
-class ScheduleEvent(Event):
+class ScheduleEvent(Event[ScheduleEventCallback]):
+    def __init__(self, function: ScheduleEventCallback, userdata: Any = None) -> None:
 
-    _args: Tuple[Any, ...]
-    _kwargs: Dict[str, Any]
+        super().__init__(type=EVENT.SCHEDULE, function=function, userdata=userdata)
 
-    def __init__(
-        self, function: Callable[..., None], *args: Any, **kwargs: Any
-    ) -> None:
-
-        Event.__init__(self, type=EVENT.SCHEDULE, function=function)
-
-        self._args = args
-        self._kwargs = kwargs
-
-    def __call__(self) -> None:
-
-        self._function(*self._args, **self._kwargs)
+    def call_callback(self, function: ScheduleEventCallback) -> None:
+        function(self._userdata)

@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Callable, List
+from typing import Any, List
 
 from pyage.constants import KEY, MOD
 from pyage.event_processor import EventProcessor
@@ -7,6 +7,7 @@ from pyage.events.key import KeyEvent
 from pyage.output import output
 from pyage.sound_bank import SoundBank
 from pyage.sound_player import SoundPlayer
+from pyage.types import KeyEventCallback
 
 
 class MenuItem(ABC):
@@ -56,9 +57,10 @@ class MenuItem(ABC):
     def add_key_event(
         self,
         key: KEY,
-        function: Callable[[bool], None],
+        function: KeyEventCallback,
         mod: MOD = MOD.NONE,
         repeat: float = 0.0,
+        userdata: Any = None,
     ) -> None:
         """
         Just like :meth:`pyage.screen.Screen.add_key_event`, this method allows you to add key events which will only trigger as long as this specific menu item is currently selected.
@@ -67,7 +69,9 @@ class MenuItem(ABC):
         ----------
         function
 
-            a function that receives :obj:`True` when the key was pressed or :obj:`False` if it was released
+            a function that receives :obj:`True` when the key was pressed or
+            :obj:`False` if it was released as first parameter, and the
+            userdata as second parameter.
 
         key
 
@@ -84,9 +88,15 @@ class MenuItem(ABC):
             example be used to take one step for every 0.2 seconds that passed
             while the key is hold down. Default is 0, which will only raise
             the event when the key gets pressed and released.
+
+        userdata
+
+            userdata which will be passed to the callback
         """
 
-        e: KeyEvent = KeyEvent(key=key, function=function, mod=mod, repeat=repeat)
+        e: KeyEvent = KeyEvent(
+            key=key, function=function, mod=mod, repeat=repeat, userdata=userdata
+        )
 
         if e not in self._keys:
             self._keys.append(e)
@@ -102,11 +112,13 @@ class MenuItem(ABC):
         self.announce()
 
         for e in self._keys:
+
             ev.add_key_event(
-                key=e._key,
-                function=e._function,
-                mod=e._mod,
-                repeat=e._repeat,
+                key=e.key,
+                function=e.function,
+                mod=e.mod,
+                repeat=e.repeat,
+                userdata=e.userdata,
             )
 
     def deselect(self) -> None:
@@ -118,7 +130,7 @@ class MenuItem(ABC):
         ev: EventProcessor = EventProcessor()
 
         for e in self._keys:
-            ev.remove_key_event(key=e._key, mod=e._mod)
+            ev.remove_key_event(key=e.key, mod=e.mod)
 
     def announce(self) -> None:
         """

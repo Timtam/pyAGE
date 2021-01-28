@@ -66,13 +66,13 @@ class TextInput(MenuItem):
 
         ev.remove_text_event(self.receiveText)
 
-    def receiveText(self, text: str, *args: Any, **kwargs: Any) -> None:
+    def receiveText(self, text: str, userdata: Any) -> None:
 
         self.text = self.text[: self.cursor] + text + self.text[self.cursor :]
         self.cursor += len(text)
         output(text)
 
-    def deleteBack(self, pressed: bool) -> None:
+    def deleteBack(self, pressed: bool, userdata: Any) -> None:
 
         if not pressed or self.cursor == 0:
             return
@@ -81,7 +81,7 @@ class TextInput(MenuItem):
         self.text = self.text[: (self.cursor - 1)] + self.text[self.cursor :]
         self.cursor -= 1
 
-    def deleteCurrent(self, pressed: bool) -> None:
+    def deleteCurrent(self, pressed: bool, userdata: Any) -> None:
 
         if not pressed:
             return
@@ -89,7 +89,7 @@ class TextInput(MenuItem):
         self.text = self.text[: self.cursor] + self.text[(self.cursor + 1) :]
         output(self.text[self.cursor])
 
-    def cursorLeft(self, pressed: bool) -> None:
+    def cursorLeft(self, pressed: bool, userdata: Any) -> None:
 
         if not pressed or self.cursor == 0:
             return
@@ -97,7 +97,7 @@ class TextInput(MenuItem):
         self.cursor -= 1
         output(self.text[self.cursor])
 
-    def cursorRight(self, pressed: bool) -> None:
+    def cursorRight(self, pressed: bool, userdata: Any) -> None:
 
         if not pressed or self.cursor == len(self.text):
             return
