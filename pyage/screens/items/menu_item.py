@@ -23,29 +23,25 @@ class MenuItem(ABC):
 
         the text to read when selecting this item
 
-    selected_sound
+    select_sound
 
         the sound to play when selecting this item. This setting overrides the
-        menu's :attr:`~pyage.screens.menu.Menu.selected_sound` setting when set.
-
-    Attributes
-    ----------
-
-    label
-
-        the text to read when selecting this item
-
-    selected_sound
-
-        the sound to play when selecting this item. This setting overrides the
-        menu's :attr:`~pyage.screens.menu.Menu.selected_sound` setting when set.
+        menu's :attr:`~pyage.screens.menu.Menu.select_sound` setting when set.
     """
 
     _keys: List[KeyEvent]
     _sound_player: SoundPlayer
 
     label: str
+    """
+    the text to read when selecting this item
+    """
+
     select_sound: str
+    """
+    the sound to play when selecting this item. This setting overrides the
+    menu's :attr:`~pyage.screens.menu.Menu.select_sound` setting when set.
+    """
 
     def __init__(self, label: str, select_sound: str = "") -> None:
 

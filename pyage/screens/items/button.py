@@ -31,18 +31,14 @@ class Button(MenuItem):
     submit_sound
 
         a sound to play when hitting the button.
-
-    Attributes
-    ----------
-
-    submit_sound
-
-        a sound to play when hitting the button.
     """
 
     _function: Any  # not yet supported by mypy
 
     submit_sound: str
+    """
+    a sound to play when hitting the button.
+    """
 
     def __init__(
         self,

@@ -13,10 +13,12 @@ if TYPE_CHECKING:
 
 class SoundPlayer(ABC):
 
+    _cache_size: int
     _sounds: List[Sound]
 
-    def __init__(self) -> None:
+    def __init__(self, cache_size: int) -> None:
 
+        self._cache_size = cache_size
         self._sounds = []
 
     def get(self, snd: str) -> Optional[Sound]:
@@ -32,6 +34,14 @@ class SoundPlayer(ABC):
         sound: Sound = cast("AudioBackend", app._audio_backend).create_sound(
             buffer=buffer
         )
+
+        if self._cache_size > 0 and len(self._sounds) >= self._cache_size:
+            self.clean_cache()
+
+        if self._cache_size > 0 and len(self._sounds) >= self._cache_size:
+            raise MemoryError(
+                "cache size overflow. too many simultaneous sounds are playing. Consider raising the pyage.sound_bank.SoundBank.cache_size value"
+            )
 
         self._sounds.append(sound)
 
@@ -50,3 +60,6 @@ class SoundPlayer(ABC):
     def __del__(self) -> None:
 
         self._sounds.clear()
+
+    def clean_cache(self) -> None:
+        self._sounds = [s for s in self._sounds if s.is_playing()]

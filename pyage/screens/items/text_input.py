@@ -27,16 +27,13 @@ class TextInput(MenuItem):
 
         the sound to play when selecting this item. This setting overrides the
         menu's :attr:`~pyage.screens.menu.Menu.selected_sound` setting when set.
-
-    Attributes
-    ----------
-    text
-
-        the text written to the input field
     """
 
     _cursor: int
     text: str
+    """
+    the text written to the input field
+    """
 
     def __init__(self, label: str, text: str = "", select_sound: str = "") -> None:
 

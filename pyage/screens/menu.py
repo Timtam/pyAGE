@@ -35,29 +35,25 @@ class Menu(Screen):
     select_sound
 
         a sound to play when selecting an item. This is overriden by the
-        selected item's :attr:`~pyage.screens.items.menu_item.selected_sound`
+        selected item's :attr:`~pyage.screens.items.menu_item.select_sound`
         attribute.
-
-    Attributes
-    ----------
-
-    select_sound
-
-        a sound to play when selecting an item. This is overriden by the
-        selected item's :attr:`~pyage.screens.items.menu_item.selected_sound`
-        attribute.
-
-    wrap
-
-        does the menu wrap (pressing up or down arrow when on the edge of
-        the menu will reset the cursor to the opposite end of the menu)?
     """
 
     _item_index: int
     _items: List[MenuItem]
 
     select_sound: str
+    """
+    a sound to play when selecting an item. This is overriden by the
+    selected item's :attr:`~pyage.screens.items.menu_item.MenuItem.select_sound`
+    attribute.
+    """
+
     wrap: bool
+    """
+    does the menu wrap (pressing up or down arrow when on the edge of
+    the menu will reset the cursor to the opposite end of the menu)?
+    """
 
     def __init__(
         self, items: List[MenuItem] = [], wrap: bool = False, select_sound: str = ""
