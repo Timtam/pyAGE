@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import TYPE_CHECKING, List, Optional, cast
+from typing import TYPE_CHECKING, Dict, List, Optional, cast
 
 import pyage.app
 import pyage.sound_bank
@@ -14,16 +14,30 @@ if TYPE_CHECKING:
 class SoundPlayer(ABC):
 
     _cache_size: int
-    _sounds: List[Sound]
+    _sounds: Dict[str, List[Sound]]
 
     def __init__(self, cache_size: int) -> None:
 
         self._cache_size = cache_size
-        self._sounds = []
+        self._sounds = {}
 
-    def get(self, snd: str) -> Optional[Sound]:
+    def get(self, snd: str, cached: bool = True) -> Optional[Sound]:
 
         app: pyage.app.App = pyage.app.App()
+        sound: Optional[Sound]
+
+        if cached:
+
+            if snd in self._sounds:
+
+                try:
+                    sound = next(s for s in self._sounds[snd] if not s.is_playing())
+                except StopIteration:
+                    sound = None
+
+                if sound:
+                    return sound
+
         bank: pyage.sound_bank.SoundBank = pyage.sound_bank.SoundBank()
 
         if snd not in bank:
@@ -31,19 +45,23 @@ class SoundPlayer(ABC):
 
         buffer: SoundBuffer = bank[snd]
 
-        sound: Sound = cast("AudioBackend", app._audio_backend).create_sound(
-            buffer=buffer
-        )
+        sound = cast("AudioBackend", app._audio_backend).create_sound(buffer=buffer)
 
-        if self._cache_size > 0 and len(self._sounds) >= self._cache_size:
+        if not cached:
+            return sound
+
+        if self._cache_size > 0 and self.get_cache_size() >= self._cache_size:
             self.clean_cache()
 
-        if self._cache_size > 0 and len(self._sounds) >= self._cache_size:
+        if self._cache_size > 0 and self.get_cache_size() >= self._cache_size:
             raise MemoryError(
                 "cache size overflow. too many simultaneous sounds are playing. Consider raising the pyage.sound_bank.SoundBank.cache_size value"
             )
 
-        self._sounds.append(sound)
+        if snd not in self._sounds:
+            self._sounds[snd] = []
+
+        self._sounds[snd].append(cast(Sound, sound))
 
         return sound
 
@@ -62,4 +80,11 @@ class SoundPlayer(ABC):
         self._sounds.clear()
 
     def clean_cache(self) -> None:
-        self._sounds = [s for s in self._sounds if s.is_playing()]
+
+        self._sounds = {
+            name: [s for s in sounds if s.is_playing()]
+            for (name, sounds) in self._sounds.items()
+        }
+
+    def get_cache_size(self) -> int:
+        return sum([len(v) for v in self._sounds.values()])
