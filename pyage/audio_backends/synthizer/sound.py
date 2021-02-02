@@ -60,3 +60,11 @@ class SynthizerSound(Sound):
             return True
 
         return False
+
+    @property
+    def volume(self) -> float:
+        return self._generator.gain
+
+    @volume.setter
+    def volume(self, value: float) -> None:
+        self._generator.gain = value

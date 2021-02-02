@@ -26,3 +26,14 @@ class Sound(ABC):
     @abstractmethod
     def is_playing(self) -> bool:
         pass
+
+    @property
+    @abstractmethod
+    def volume(self) -> float:
+        pass
+
+    @volume.setter
+    def volume(self, value: float) -> None:
+        # mypy seems to have an issue with abstract setters
+        # so we'll avoid those for now
+        raise NotImplementedError
