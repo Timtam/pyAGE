@@ -16,7 +16,7 @@ class Sound(ABC):
         return self._buffer
 
     @abstractmethod
-    def play(self, restart: bool = True) -> None:
+    def play(self) -> None:
         pass
 
     @abstractmethod

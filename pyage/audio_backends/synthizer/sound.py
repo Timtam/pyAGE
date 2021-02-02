@@ -32,13 +32,11 @@ class SynthizerSound(Sound):
 
         self._last_position = 0.0
 
-    def play(self, restart: bool = True) -> None:
+    def play(self) -> None:
 
-        if restart:
-            self._generator.position = 0.0
-
+        self._generator.position = 0.0
         self._source.play()
-        self._last_position = self._generator.position
+        self._last_position = 0.0
 
     def stop(self) -> None:
 
