@@ -1,0 +1,26 @@
+version: "{build}"
+build: off
+environment:
+  matrix:
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      PYTHON: "C:\\Python38"
+      PYTHON_VERSION: "3.8"
+      PYTHON_ARCH: "32"
+      STACK: "3.8"
+
+stack: python %STACK%
+
+install:
+  - ps: |
+      $version = &"$($env:PYTHON)\python.exe" -c --% "from pyage import __version__; import sys; _ = sys.stdout.write(__version__)"
+      Update-AppveyorBuild -Version "$($version)+$($env:APPVEYOR_BUILD_NUMBER)"
+  - cmd: |
+      %PYTHON%\python.exe --version
+      %PYTHON%\Scripts\pip.exe --version
+      %PYTHON%\python.exe -m pip install -r requirements-dev.txt
+build_script:
+  - cmd: |
+      %PYTHON%\\python.exe setup.py sdist
+
+artifacts:
+  - path: dist/*
