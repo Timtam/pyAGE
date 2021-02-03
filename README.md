@@ -53,12 +53,12 @@ With full Python 3 compatibility, including type-checking via MyPy, and extensib
 <!-- GETTING STARTED -->
 ## Getting Started
 
-We offer a comprehensive documentation, including a full tutorial and API documentation. [visit the documentation](#documentation-url)
+We offer a comprehensive documentation, including a full tutorial and API documentation. [visit the documentation][documentation-url]
 
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](#issues-url) for a list of proposed features (and known issues).
+See the [open issues][issues-url] for a list of proposed features (and known issues).
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -75,7 +75,7 @@ Contributions are what make the open source community such an amazing place to b
 
 ### Contribute by testing
 
-If you find any bugs or got some amazing idea to share or discuss, don't hesitate to open an [issue](#issues-url) and we'll see where we can go from there.
+If you find any bugs or got some amazing idea to share or discuss, don't hesitate to open an [issue][issues-url] and we'll see where we can go from there.
 
 ### Contribute by paying me a coffee
 
