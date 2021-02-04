@@ -17,6 +17,7 @@ mypy = "*"
 pre-commit = "*"
 sphinx = "*"
 sphinx-autodoc-typehints = "*"
+wheel = "*"
 
 [requires]
 python_version = "3.8"
