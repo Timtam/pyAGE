@@ -37,7 +37,7 @@ deploy:
     branch: main
     APPVEYOR_REPO_TAG: true
 
-deploy_script:
+after_deploy:
   - ps: |
       if($env:APPVEYOR_REPO_TAG -eq 'true') {
         Write-Output ("Deploying " + $env:APPVEYOR_REPO_TAG_NAME + " to PyPI...")
