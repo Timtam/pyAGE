@@ -20,7 +20,7 @@ install:
       %PYTHON%\python.exe -m pip install -r requirements-dev.txt
 build_script:
   - cmd: |
-      %PYTHON%\\python.exe setup.py sdist
+      %PYTHON%\\python.exe setup.py bdist_wheel --universal
 
 artifacts:
   - path: dist/*
