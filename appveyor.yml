@@ -30,6 +30,8 @@ artifacts:
   - path: dist/*.whl
 
 deploy:
+  auth_token:
+    secure: PFPMLUtwkaBjEP5FyQP3hgsHMRr5Uejw1eL6aOQKOIl1S1iAx1QcdVpmtZv/FKxC
   description: 'pyAGE release, see readme or changelog for more information'
   provider: GitHub
   artifact: dist/*.whl
