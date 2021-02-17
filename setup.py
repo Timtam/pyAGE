@@ -10,7 +10,7 @@ with open(requirements_file, "r") as f:
     requirements = f.read()
 
 setup(
-    name="pyAGE",
+    name="py-AGE",
     version=__version__,
     author="Toni Barth",
     author_email="software@satoprogs.de",
