@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Any, List
+from typing import Any, List, cast
 
 from pyage.constants import KEY, MOD
 from pyage.event_processor import EventProcessor
@@ -109,9 +109,12 @@ class MenuItem(ABC):
 
         for e in self._keys:
 
+            if not e.function:
+                continue
+
             ev.add_key_event(
                 key=e.key,
-                function=e.function,
+                function=cast(KeyEventCallback, e.function),
                 mod=e.mod,
                 repeat=e.repeat,
                 userdata=e.userdata,

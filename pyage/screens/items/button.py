@@ -1,6 +1,7 @@
 from typing import Any, Callable, Optional
 
 from pyage.constants import KEY
+from pyage.reference import Reference
 from pyage.sound import Sound
 
 from .menu_item import MenuItem
@@ -33,7 +34,7 @@ class Button(MenuItem):
         a sound to play when hitting the button.
     """
 
-    _function: Any  # not yet supported by mypy
+    _function: Reference[Callable[[], None]]
 
     submit_sound: str
     """
@@ -50,7 +51,7 @@ class Button(MenuItem):
 
         super().__init__(label=label, select_sound=select_sound)
 
-        self._function = function
+        self._function = Reference(function)
         self.submit_sound = submit_sound
 
         self.add_key_event(key=KEY.RETURN, function=self.submit)
@@ -68,4 +69,5 @@ class Button(MenuItem):
         if snd:
             snd.play()
 
-        self._function()
+        if self._function.is_alive():
+            self._function()()

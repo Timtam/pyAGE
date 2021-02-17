@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Any, List
+from typing import Any, List, cast
 
 import pyage.sound_bank
 
@@ -95,9 +95,13 @@ class Screen(ABC):
         e: KeyEvent
 
         for e in self._keys:
+
+            if not e.function:
+                continue
+
             self._event_processor.add_key_event(
                 key=e.key,
-                function=e.function,
+                function=cast(KeyEventCallback, e.function),
                 mod=e.mod,
                 repeat=e.repeat,
                 userdata=e.userdata,

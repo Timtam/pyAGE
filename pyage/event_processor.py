@@ -105,6 +105,9 @@ class EventProcessor(metaclass=PySingleton):
         if e in self._unregistered_events:
             return
 
+        if not e.function:
+            return
+
         if e.type == EVENT.KEY:
 
             if cast(KeyEvent, e).pressed and cast(KeyEvent, e).repeat > 0:
