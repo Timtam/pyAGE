@@ -1,4 +1,4 @@
 cytolk==0.1.6; sys_platform == 'win32'
 pygame==2.0.1
 python-singleton-metaclasses==0.1.0
-synthizer==0.8.10; sys_platform == 'win32'
+synthizer==0.8.17; sys_platform == 'win32'
