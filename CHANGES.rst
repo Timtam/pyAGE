@@ -11,6 +11,10 @@ Features added
 * improved internal reference management to prevent bound methods to create 
   cyclic references and therefore prevent the garbage collector from doing its work
 
+Bugs fixed
+----------
+
+* fixed some crashes when deleting texts in menu text inputs
 
 0.1.0-a3 (2021-02-04)
 =====================

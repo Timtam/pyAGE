@@ -74,17 +74,21 @@ class TextInput(MenuItem):
         if not pressed or self.cursor == 0:
             return
 
-        output(self.text[self.cursor])
+        output(self.text[self.cursor - 1])
         self.text = self.text[: (self.cursor - 1)] + self.text[self.cursor :]
         self.cursor -= 1
 
     def deleteCurrent(self, pressed: bool, userdata: Any) -> None:
 
-        if not pressed:
+        if not pressed or len(self.text) == self.cursor:
             return
 
         self.text = self.text[: self.cursor] + self.text[(self.cursor + 1) :]
-        output(self.text[self.cursor])
+
+        if self.cursor < len(self.text):
+            output(self.text[self.cursor])
+        else:
+            output("empty")
 
     def cursorLeft(self, pressed: bool, userdata: Any) -> None:
 
