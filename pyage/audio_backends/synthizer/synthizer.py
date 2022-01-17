@@ -22,7 +22,7 @@ class Synthizer(AudioBackend):
 
     def __del__(self) -> None:
 
-        self._context.destroy()
+        self._context.dec_ref()
 
         synthizer.shutdown()
 
@@ -32,7 +32,7 @@ class Synthizer(AudioBackend):
 
         try:
             return SynthizerSoundBuffer(src)
-        except synthizer.SynthizerError as exc:
+        except synthizer.SynthizerError as exc:  # noqa: F841
             raise AudioLoadError(str(exc))
 
     def create_sound(self, buffer: SoundBuffer) -> SynthizerSound:

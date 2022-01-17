@@ -24,7 +24,7 @@ class SynthizerSound(Sound):
 
         self._context = context
         self._generator = synthizer.BufferGenerator(self._context)
-        self._generator.buffer = cast(SynthizerSoundBuffer, self._buffer)._buffer
+        self._generator.buffer.value = cast(SynthizerSoundBuffer, self._buffer)._buffer
 
         self._source = synthizer.Source3D(self._context)
         self._source.add_generator(self._generator)
@@ -34,7 +34,7 @@ class SynthizerSound(Sound):
 
     def play(self) -> None:
 
-        self._generator.position = 0.0
+        self._generator.playback_position.value = 0.0
         self._source.play()
         self._last_position = 0.0
 
@@ -46,14 +46,14 @@ class SynthizerSound(Sound):
 
         try:
             self._source.remove_generator(self._generator)
-            self._source.destroy()
-            self._generator.destroy()
+            self._source.dec_ref()
+            self._generator.dec_ref()
         except synthizer.SynthizerError:
             pass
 
     def is_playing(self) -> bool:
 
-        position: float = self._generator.position
+        position: float = self._generator.playback_position.value
 
         if position != self._last_position:
             self._last_position = position
@@ -63,8 +63,8 @@ class SynthizerSound(Sound):
 
     @property
     def volume(self) -> float:
-        return self._generator.gain
+        return self._generator.gain.value
 
     @volume.setter
     def volume(self, value: float) -> None:
-        self._generator.gain = value
+        self._generator.gain.value = value

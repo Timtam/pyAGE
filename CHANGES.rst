@@ -10,6 +10,10 @@ Features added
 
 * update dev-dependencies to latest versions
 * update pygame to v2.1.2
+* update synthizer to v0.12.0, which is the latest official version supporting 
+  Python 3.8. Since thats currently our main development version, we'll stick 
+  with that version for a while, until we spread out to support more than just 
+  one Python version.
 * improved internal reference management to prevent bound methods to create 
   cyclic references and therefore prevent the garbage collector from doing its work
 
