@@ -61,17 +61,14 @@ class EventProcessor(metaclass=PySingleton):
                     ),
                 )
 
-        elif e.type == pygame.ACTIVEEVENT:
-
-            if e.state == 1:
-                return
+        elif e.type == pygame.WINDOWFOCUSGAINED or e.type == pygame.WINDOWFOCUSLOST:
 
             for f in self._registered_events:
 
                 if f.type == EVENT.FOCUS:
 
                     r_f = copy.copy(f)
-                    cast(FocusEvent, r_f).gain = bool(e.gain)
+                    cast(FocusEvent, r_f).gain = e.type == pygame.WINDOWFOCUSGAINED
 
                     heapq.heappush(
                         self._event_queue,
@@ -378,6 +375,6 @@ class EventProcessor(metaclass=PySingleton):
                 self._unregistered_events.append(f)
                 self._text_event_count -= 1
 
-                if self._text_event_count <= 0:
-                    self._text_event_count = 0
-                    pygame.key.stop_text_input()
+        if self._text_event_count <= 0:
+            self._text_event_count = 0
+            pygame.key.stop_text_input()

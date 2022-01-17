@@ -8,6 +8,8 @@ pyAGE Changelog
 Features added
 --------------
 
+* update dev-dependencies to latest versions
+* update pygame to v2.1.2
 * improved internal reference management to prevent bound methods to create 
   cyclic references and therefore prevent the garbage collector from doing its work
 
