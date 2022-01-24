@@ -16,5 +16,8 @@ setup(
     author_email="software@satoprogs.de",
     url="https://github.com/Timtam/pyAGE",
     packages=find_packages(),
+    package_data={
+        "pyage": ["py.typed"],
+    },
     install_requires=requirements.split("\r\n"),
 )

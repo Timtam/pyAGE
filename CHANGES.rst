@@ -24,6 +24,7 @@ Bugs fixed
 ----------
 
 * fixed some crashes when deleting texts in menu text inputs
+* added py.typed to properly indicate typing support
 
 0.1.0-a3 (2021-02-04)
 =====================
