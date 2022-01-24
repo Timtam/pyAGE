@@ -134,6 +134,20 @@ class EventProcessor(metaclass=PySingleton):
 
         e()
 
+        if (
+            e.type == EVENT.SCHEDULE
+            and cast(ScheduleEvent, e).loop > 0
+            and e not in self._unregistered_events
+        ):
+
+            heapq.heappush(
+                self._event_queue,
+                (
+                    time.time() + cast(ScheduleEvent, e).loop,
+                    e,
+                ),
+            )
+
     def _unregister_event(self, e: Event) -> None:
 
         try:
@@ -301,7 +315,11 @@ class EventProcessor(metaclass=PySingleton):
                 self._unregistered_events.append(f)
 
     def add_schedule_event(
-        self, delay: float, function: ScheduleEventCallback, userdata: Any = None
+        self,
+        delay: float,
+        function: ScheduleEventCallback,
+        loop: float = 0.0,
+        userdata: Any = None,
     ) -> None:
         """
         registers a callback that gets called after a given period of time
@@ -316,6 +334,12 @@ class EventProcessor(metaclass=PySingleton):
 
             a callback accepting only the userdata as parameter.
 
+        loop
+
+            specifies a given amount of time after which the event will be
+            called again. Default is 0, which indicates that the event will
+            only be fired once and automatically be removed afterwards.
+
         userdata
 
             userdata which will be passed to the callback
@@ -323,7 +347,12 @@ class EventProcessor(metaclass=PySingleton):
 
         heapq.heappush(
             self._event_queue,
-            (time.time() + delay, ScheduleEvent(function=function, userdata=userdata)),
+            (
+                time.time() + delay,
+                ScheduleEvent(
+                    function=function, delay=delay, loop=loop, userdata=userdata
+                ),
+            ),
         )
 
     def add_text_event(
@@ -378,3 +407,32 @@ class EventProcessor(metaclass=PySingleton):
         if self._text_event_count <= 0:
             self._text_event_count = 0
             pygame.key.stop_text_input()
+
+    def remove_schedule_event(
+        self, function: FocusEventCallback, loop: float = 0.0
+    ) -> None:
+        """
+        removes a previously registered scheduled callback
+
+        Parameters
+        ----------
+        function
+
+            the function registered via
+            :meth:`~pyage.event_processor.EventProcessor.add_schedule_event`
+
+        loop
+
+            the given loop time (see :meth:`pyage.event_processor.EventProcessor.add_schedule_event`)
+        """
+
+        f: Event
+
+        for f in self._registered_events:
+            if (
+                f not in self._unregistered_events
+                and f.type == EVENT.SCHEDULE
+                and f.function == function
+                and cast(ScheduleEvent, f).loop == loop
+            ):
+                self._unregistered_events.append(f)

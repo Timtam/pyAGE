@@ -8,12 +8,15 @@ pyAGE Changelog
 Features added
 --------------
 
-* update dev-dependencies to latest versions
-* update pygame to v2.1.2
-* update synthizer to v0.12.0, which is the latest official version supporting 
+* updated dev-dependencies to latest versions
+* updated pygame to v2.1.2
+* updated synthizer to v0.12.0, which is the latest official version supporting 
   Python 3.8. Since thats currently our main development version, we'll stick 
   with that version for a while, until we spread out to support more than just 
   one Python version.
+* added loop parameter to EventProcessor.add_schedule_event, allowing schedule 
+  events to be looped until removed manually
+* added EventProcessor.remove_schedule_event to manually remove scheduled callbacks
 * improved internal reference management to prevent bound methods to create 
   cyclic references and therefore prevent the garbage collector from doing its work
 
