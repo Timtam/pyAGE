@@ -10,7 +10,6 @@ from .event_processor import EventProcessor
 from .output_backend import OutputBackend
 from .screen_stack import ScreenStack
 from .sound_bank import SoundBank
-from .output_backends.ao2 import Ao2
 
 
 class App(metaclass=PySingleton):
@@ -79,8 +78,6 @@ class App(metaclass=PySingleton):
             except ImportError:
                 self._output_backend = None
 
-        elif output_backend == Ao2:
-            self.output_backend = Ao2()
         else:
             self._output_backend = output_backend
 
