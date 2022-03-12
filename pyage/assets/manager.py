@@ -104,8 +104,6 @@ class AssetManager(metaclass=PySingleton):
                         f"this asset is already loaded: {p.resolve()}"
                     )
 
-                print(p)
-
                 buffer = FileBuffer(p)
 
                 if not lazy:

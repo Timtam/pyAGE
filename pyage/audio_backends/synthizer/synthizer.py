@@ -4,6 +4,7 @@ from pyage.assets.buffer import Buffer
 from pyage.audio_backends.audio_backend import AudioBackend
 
 from .sound_wrapper import SynthizerSoundWrapper
+from .stream_wrapper import SynthizerStreamWrapper
 
 
 class Synthizer(AudioBackend):
@@ -25,6 +26,13 @@ class Synthizer(AudioBackend):
     def create_sound(self, buffer: Buffer) -> SynthizerSoundWrapper:
 
         return SynthizerSoundWrapper(
+            buffer=buffer,
+            context=self._context,
+        )
+
+    def create_stream(self, buffer: Buffer) -> SynthizerStreamWrapper:
+
+        return SynthizerStreamWrapper(
             buffer=buffer,
             context=self._context,
         )

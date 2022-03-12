@@ -3,16 +3,16 @@ from typing import cast
 import synthizer
 
 from pyage.assets.buffer import Buffer
-from pyage.audio_backends.sound_wrapper import SoundWrapper
+from pyage.audio_backends.stream_wrapper import StreamWrapper
 
 
-class SynthizerSoundWrapper(SoundWrapper):
+class SynthizerStreamWrapper(StreamWrapper):
 
     _buffer: synthizer.Buffer
     _context: synthizer.Context
     _generator: synthizer.BufferGenerator
     _last_position: float
-    _source: synthizer.Source3D
+    _source: synthizer.DirectSource
 
     def __init__(
         self,
@@ -28,21 +28,30 @@ class SynthizerSoundWrapper(SoundWrapper):
         self._generator = synthizer.BufferGenerator(self._context)
         self._generator.buffer.value = self._buffer
 
-        self._source = synthizer.Source3D(self._context)
+        self._source = synthizer.DirectSource(self._context)
         self._source.add_generator(self._generator)
         self._source.pause()
 
         self._last_position = 0.0
 
-    def play(self) -> None:
+    def play(self, restart: bool) -> None:
 
-        self._generator.playback_position.value = 0.0
+        if restart:
+            self._generator.playback_position.value = 0.0
+            self._last_position = 0.0
+
         self._source.play()
-        self._last_position = 0.0
 
     def stop(self) -> None:
 
         self._source.pause()
+        self._generator.playback_position.value = 0.0
+        self._last_position = 0.0
+
+    def pause(self) -> None:
+
+        self._source.pause()
+        self._last_position = self._generator.playback_position.value
 
     def __del__(self) -> None:
 
