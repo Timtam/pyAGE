@@ -11,4 +11,4 @@ class Ao2(OutputBackend):
         self.speaker = None
 
     def output(self, text: str, interrupt: bool = True) -> None:
-        speaker.output(text, interrupt)
+        self.speaker.output(text, interrupt)
