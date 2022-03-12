@@ -1,9 +1,10 @@
-from typing import Any, List, Optional
+from typing import Any, List, Optional, cast
 
+from pyage.assets.collection import AssetCollection
+from pyage.assets.playable import Playable
 from pyage.constants import KEY
-from pyage.screen import Screen
 from pyage.screens.items.menu_item import MenuItem
-from pyage.sound import Sound
+from pyage.screens.screen import Screen
 
 
 class Menu(Screen):
@@ -42,7 +43,7 @@ class Menu(Screen):
     _item_index: int
     _items: List[MenuItem]
 
-    select_sound: str
+    select_sound: Optional[AssetCollection[Playable]]
     """
     a sound to play when selecting an item. This is overriden by the
     selected item's :attr:`~pyage.screens.items.menu_item.MenuItem.select_sound`
@@ -56,7 +57,10 @@ class Menu(Screen):
     """
 
     def __init__(
-        self, items: List[MenuItem] = [], wrap: bool = False, select_sound: str = ""
+        self,
+        items: List[MenuItem] = [],
+        wrap: bool = False,
+        select_sound: Optional[AssetCollection[Playable]] = None,
     ) -> None:
 
         super().__init__()
@@ -102,7 +106,7 @@ class Menu(Screen):
 
     def select_previous_item(self, pressed: bool, userdata: Any) -> None:
 
-        snd: Optional[Sound] = None
+        snd: Optional[Playable] = None
 
         if not pressed:
             return
@@ -117,10 +121,12 @@ class Menu(Screen):
         if self._item_index < 0:
             self._item_index = len(self._items) - 1
 
-        if self._items[self._item_index].select_sound != "":
-            snd = self.sound_player.get(self._items[self._item_index].select_sound)
-        elif self.select_sound != "":
-            snd = self.sound_player.get(self.select_sound)
+        if self._items[self._item_index].select_sound:
+            snd = cast(
+                AssetCollection[Playable], self._items[self._item_index].select_sound
+            ).get()
+        elif self.select_sound:
+            snd = self.select_sound.get()
 
         if snd:
             snd.play()
@@ -129,7 +135,7 @@ class Menu(Screen):
 
     def select_next_item(self, pressed: bool, userdata: Any) -> None:
 
-        snd: Optional[Sound] = None
+        snd: Optional[Playable] = None
 
         if not pressed:
             return
@@ -144,10 +150,12 @@ class Menu(Screen):
         if self._item_index >= len(self._items):
             self._item_index = 0
 
-        if self._items[self._item_index].select_sound != "":
-            snd = self.sound_player.get(self._items[self._item_index].select_sound)
-        elif self.select_sound != "":
-            snd = self.sound_player.get(self.select_sound)
+        if self._items[self._item_index].select_sound:
+            snd = cast(
+                AssetCollection[Playable], self._items[self._item_index].select_sound
+            ).get()
+        elif self.select_sound:
+            snd = self.select_sound.get()
 
         if snd:
             snd.play()

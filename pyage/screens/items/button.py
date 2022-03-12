@@ -1,8 +1,9 @@
 from typing import Any, Callable, Optional
 
+from pyage.assets.collection import AssetCollection
+from pyage.assets.playable import Playable
 from pyage.constants import KEY
 from pyage.reference import Reference
-from pyage.sound import Sound
 
 from .menu_item import MenuItem
 
@@ -36,7 +37,7 @@ class Button(MenuItem):
 
     _function: Reference[Callable[[], None]]
 
-    submit_sound: str
+    submit_sound: Optional[AssetCollection[Playable]]
     """
     a sound to play when hitting the button.
     """
@@ -45,8 +46,8 @@ class Button(MenuItem):
         self,
         label: str,
         function: Callable[[], None] = lambda: None,
-        select_sound: str = "",
-        submit_sound: str = "",
+        select_sound: Optional[AssetCollection[Playable]] = None,
+        submit_sound: Optional[AssetCollection[Playable]] = None,
     ) -> None:
 
         super().__init__(label=label, select_sound=select_sound)
@@ -58,13 +59,13 @@ class Button(MenuItem):
 
     def submit(self, pressed: bool, userdata: Any) -> None:
 
-        snd: Optional[Sound] = None
+        snd: Optional[Playable] = None
 
         if not pressed:
             return
 
-        if self.submit_sound != "":
-            snd = self.sound_player.get(self.select_sound)
+        if self.submit_sound:
+            snd = self.submit_sound.get()
 
         if snd:
             snd.play()

@@ -1,12 +1,12 @@
 from abc import ABC
-from typing import Any, List, cast
+from typing import Any, List, Optional, cast
 
+from pyage.assets.collection import AssetCollection
+from pyage.assets.playable import Playable
 from pyage.constants import KEY, MOD
 from pyage.event_processor import EventProcessor
 from pyage.events.key import KeyEvent
 from pyage.output import output
-from pyage.sound_bank import SoundBank
-from pyage.sound_player import SoundPlayer
 from pyage.types import KeyEventCallback
 
 
@@ -30,23 +30,23 @@ class MenuItem(ABC):
     """
 
     _keys: List[KeyEvent]
-    _sound_player: SoundPlayer
 
     label: str
     """
     the text to read when selecting this item
     """
 
-    select_sound: str
+    select_sound: Optional[AssetCollection[Playable]]
     """
     the sound to play when selecting this item. This setting overrides the
     menu's :attr:`~pyage.screens.menu.Menu.select_sound` setting when set.
     """
 
-    def __init__(self, label: str, select_sound: str = "") -> None:
+    def __init__(
+        self, label: str, select_sound: Optional[AssetCollection[Playable]] = None
+    ) -> None:
 
         self._keys = []
-        self._sound_player = SoundBank().create_sound_player()
         self.label = label
         self.select_sound = select_sound
 
@@ -139,11 +139,3 @@ class MenuItem(ABC):
         """
 
         output(self.label)
-
-    @property
-    def sound_player(self) -> SoundPlayer:
-        """
-        a :class:`~pyage.sound_player.SoundPlayer` instance which can be used
-        to play sounds.
-        """
-        return self._sound_player

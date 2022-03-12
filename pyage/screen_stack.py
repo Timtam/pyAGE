@@ -2,7 +2,7 @@ from typing import List
 
 from pysingleton import PySingleton
 
-from .screen import Screen
+from pyage.screens.screen import Screen
 
 
 class ScreenStack(metaclass=PySingleton):

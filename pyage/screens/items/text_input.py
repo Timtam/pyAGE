@@ -1,5 +1,7 @@
-from typing import Any
+from typing import Any, Optional
 
+from pyage.assets.collection import AssetCollection
+from pyage.assets.playable import Playable
 from pyage.constants import KEY
 from pyage.event_processor import EventProcessor
 from pyage.output import output
@@ -35,7 +37,12 @@ class TextInput(MenuItem):
     the text written to the input field
     """
 
-    def __init__(self, label: str, text: str = "", select_sound: str = "") -> None:
+    def __init__(
+        self,
+        label: str,
+        text: str = "",
+        select_sound: Optional[AssetCollection[Playable]] = None,
+    ) -> None:
 
         super().__init__(label=label, select_sound=select_sound)
 

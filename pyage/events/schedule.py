@@ -1,7 +1,7 @@
 from typing import Any
 
 from pyage.constants import EVENT
-from pyage.event import Event
+from pyage.events.event import Event
 from pyage.types import ScheduleEventCallback
 
 

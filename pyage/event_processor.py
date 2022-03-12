@@ -8,7 +8,7 @@ import pygame
 from pysingleton import PySingleton
 
 from pyage.constants import EVENT, KEY, MOD
-from pyage.event import Event
+from pyage.events.event import Event
 from pyage.events.focus import FocusEvent
 from pyage.events.key import KeyEvent
 from pyage.events.schedule import ScheduleEvent

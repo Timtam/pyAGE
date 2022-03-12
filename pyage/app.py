@@ -5,11 +5,11 @@ from typing import Callable, Optional
 import pygame
 from pysingleton import PySingleton
 
-from .audio_backend import AudioBackend
+from pyage.audio_backends.audio_backend import AudioBackend
+
 from .event_processor import EventProcessor
 from .output_backend import OutputBackend
 from .screen_stack import ScreenStack
-from .sound_bank import SoundBank
 
 
 class App(metaclass=PySingleton):
@@ -157,7 +157,6 @@ class App(metaclass=PySingleton):
         while stack.pop():
             pass
 
-        SoundBank().unload_all()
         pygame.display.quit()
 
     @property

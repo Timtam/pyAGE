@@ -1,13 +1,9 @@
-from typing import cast
-
 import synthizer
 
-from pyage.audio_backend import AudioBackend
-from pyage.exceptions import AudioLoadError
-from pyage.sound_buffer import SoundBuffer
+from pyage.assets.buffer import Buffer
+from pyage.audio_backends.audio_backend import AudioBackend
 
-from .sound import SynthizerSound
-from .sound_buffer import SynthizerSoundBuffer
+from .sound_wrapper import SynthizerSoundWrapper
 
 
 class Synthizer(AudioBackend):
@@ -26,18 +22,9 @@ class Synthizer(AudioBackend):
 
         synthizer.shutdown()
 
-    def create_sound_buffer(self, src: str) -> SynthizerSoundBuffer:
+    def create_sound(self, buffer: Buffer) -> SynthizerSoundWrapper:
 
-        exc: synthizer.SynthizerError
-
-        try:
-            return SynthizerSoundBuffer(src)
-        except synthizer.SynthizerError as exc:  # noqa: F841
-            raise AudioLoadError(str(exc))
-
-    def create_sound(self, buffer: SoundBuffer) -> SynthizerSound:
-
-        return SynthizerSound(
-            buffer=cast(SynthizerSoundBuffer, buffer),
+        return SynthizerSoundWrapper(
+            buffer=buffer,
             context=self._context,
         )
