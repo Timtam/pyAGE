@@ -13,7 +13,7 @@ from pyage.types import KeyEventCallback
 class MenuItem(ABC):
     """
     This is an abstract class which represents the base of every other menu
-    item that can be used together with the :class:`pyage.screens.menu.Menu`
+    item that can be used together with the :class:`pyage.screens.Menu`
     screen. You'll need to inherit this class when creating your own type of
     menu items.
 
@@ -26,7 +26,7 @@ class MenuItem(ABC):
     select_sound
 
         the sound to play when selecting this item. This setting overrides the
-        menu's :attr:`~pyage.screens.menu.Menu.select_sound` setting when set.
+        menu's :attr:`~pyage.screens.Menu.select_sound` setting when set.
     """
 
     _keys: List[KeyEvent]
@@ -39,7 +39,7 @@ class MenuItem(ABC):
     select_sound: Optional[AssetCollection[Playable]]
     """
     the sound to play when selecting this item. This setting overrides the
-    menu's :attr:`~pyage.screens.menu.Menu.select_sound` setting when set.
+    menu's :attr:`~pyage.screens.Menu.select_sound` setting when set.
     """
 
     def __init__(
@@ -59,7 +59,9 @@ class MenuItem(ABC):
         userdata: Any = None,
     ) -> None:
         """
-        Just like :meth:`pyage.screen.Screen.add_key_event`, this method allows you to add key events which will only trigger as long as this specific menu item is currently selected.
+        Just like :meth:`pyage.screens.Screen.add_key_event`, this method
+        allows you to add key events which will only trigger as long as this
+        specific menu item is currently selected.
 
         Parameters
         ----------

@@ -26,12 +26,12 @@ class Screen(ABC):
     ) -> None:
         """
         This function allows you to register keystrokes to this screen. Unlike
-        :meth:`pyage.event_processor.EventProcessor.add_key_event`, the key
+        :meth:`pyage.EventProcessor.add_key_event`, the key
         events registered with this method will automatically be unregistered
         as soon as the screen is not the top-most screen on the screen stack
         anymore and will be registered again as soon as the screen gets shown
         again. Any parameters work similarly to
-        :meth:`pyage.event_processor.EventProcessor.add_key_event` however.
+        :meth:`pyage.EventProcessor.add_key_event` however.
 
         Parameters
         ----------
@@ -75,8 +75,8 @@ class Screen(ABC):
         """
         this function is called automatically whenever the screen is shown,
         either by pushing it on top of the screen stack with the
-        :meth:`pyage.screen_stack.ScreenStack.push` method, or by popping a
-        screen via the :meth:`pyage.screen_stack.ScreenStack.pop` method.
+        :meth:`pyage.ScreenStack.push` method, or by popping a
+        screen via the :meth:`pyage.ScreenStack.pop` method.
 
         Parameters
         ----------
@@ -105,9 +105,9 @@ class Screen(ABC):
     def hidden(self, popped: bool) -> None:
         """
         this method is called whenever a screen is hidden, either because it
-        was popped via :meth:`pyage.screen_stack.ScreenStack.pop` or another
+        was popped via :meth:`pyage.ScreenStack.pop` or another
         screen was pushed on top of it via
-        :meth:`pyage.screen_stack.ScreenStack.push`.
+        :meth:`pyage.ScreenStack.push`.
 
         Parameters
         ----------

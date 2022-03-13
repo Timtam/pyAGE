@@ -8,7 +8,7 @@ pyAGE - an audio game engine for beginners and professionals alike
 
 **pyAGE** is an engine to create audio games on the fly. In contradiction to 
 video games, audio games usually don't feature graphics and thus pyAGE doesn't 
-provide image-processing capabilities, but even more powerful sound management 
+provide image-processing capabilities, but even more powerful asset management 
 tools, as well as keystroke processing and event queues, all baked into a 
 simple-to-use interface that is convenient to use for beginners and 
 professionals at the same time.

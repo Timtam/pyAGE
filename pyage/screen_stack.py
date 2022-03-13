@@ -22,9 +22,9 @@ class ScreenStack(metaclass=PySingleton):
 
         Event callbacks
 
-        - :meth:`pyage.screen.Screen.shown` will be called in the pushed
+        - :meth:`pyage.screens.Screen.shown` will be called in the pushed
           screen to indicate that the screen was pushed onto the stack
-        - :meth:`pyage.screen.Screen.hidden` will be called in the previously
+        - :meth:`pyage.screens.Screen.hidden` will be called in the previously
           top-most screen (if available) to indicate that it is no longer shown
         """
 
@@ -50,10 +50,10 @@ class ScreenStack(metaclass=PySingleton):
 
         Event callbacks
 
-        - :meth:`pyage.screen.Screen.shown` will be called in the screen that
+        - :meth:`pyage.screens.Screen.shown` will be called in the screen that
           is now the top-most screen on the stack to indicate that it is now
           visible again
-        - :meth:`pyage.screen.Screen.hidden` will be called in the popped
+        - :meth:`pyage.screens.Screen.hidden` will be called in the popped
           screen to indicate that its not visible anymore
 
         """

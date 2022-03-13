@@ -35,6 +35,7 @@ author = "Toni Barth"
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
@@ -105,3 +106,4 @@ intersphinx_mapping = {
 napoleon_use_param = True
 
 autodoc_mock_imports = ["synthizer", "cytolk"]
+autodoc_typehints_format = "short"

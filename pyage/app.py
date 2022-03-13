@@ -18,11 +18,11 @@ class App(metaclass=PySingleton):
     The app is the central object which handles the game loop. It is fairly
     simple to use, but very important as well.
 
-    Using :meth:`~pyage.app.App.show` will initialize the game, while
-    :meth:`~pyage.app.App.process` will run the actual game loop.
-    :meth:`~pyage.app.App.quit` can be used at any time to quit the game.
+    Using :meth:`~pyage.App.show` will initialize the game, while
+    :meth:`~pyage.App.process` will run the actual game loop.
+    :meth:`~pyage.App.quit` can be used at any time to quit the game.
 
-    Please note that :class:`pyage.app.App` is a singleton class, thus you
+    Please note that :class:`pyage.App` is a singleton class, thus you
     can import and initialize this class at any time to get access to it.
     """
 
@@ -101,10 +101,6 @@ class App(metaclass=PySingleton):
     def quit(self) -> None:
         """
         This method will tell the game loop to quit as soon as possible, releasing all resources in the process.
-
-        Parameters
-        ----------
-
         """
 
         self._quit = True
@@ -122,7 +118,6 @@ class App(metaclass=PySingleton):
             The function needs to take two parameters. The first parameter is
             the App object, and the second parameter is a float which
             determines the delta time since the last frame in seconds.
-
         """
 
         clock: pygame.time.Clock = pygame.time.Clock()
@@ -181,7 +176,7 @@ class App(metaclass=PySingleton):
         title
 
             the window title (default is the app name given to
-            :meth:`~pyage.app.App.show`)
+            :meth:`~pyage.App.show`)
 
         """
 

@@ -28,7 +28,7 @@ class Button(MenuItem):
     select_sound
 
         the sound to play when selecting this item. This setting overrides the
-        menu's :attr:`~pyage.screens.menu.Menu.selected_sound` setting when set.
+        menu's :attr:`~pyage.screens.Menu.selected_sound` setting when set.
 
     submit_sound
 
@@ -36,6 +36,10 @@ class Button(MenuItem):
     """
 
     _function: Reference[Callable[[], None]]
+
+    label: str
+
+    select_sound: Optional[AssetCollection[Playable]]
 
     submit_sound: Optional[AssetCollection[Playable]]
     """

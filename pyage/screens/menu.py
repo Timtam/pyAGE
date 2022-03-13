@@ -13,20 +13,20 @@ class Menu(Screen):
     two ways:
 
     * instantiating it and adding items to it on-the-fly (see either
-      :meth:`~pyage.screens.menu.Menu.add_item` or the parameters below),
+      :meth:`~pyage.screens.Menu.add_item` or the parameters below),
       which can be useful for displaying static data
     * inheriting it, which is encouraged for more complex applications.
 
     **pyAGE** already contains several types of menu items which can be
     combined freely to create whatever menu you want. All of those are
-    documented :ref:`here <menu-items>`:
+    documented here:
 
     Parameters
     ----------
     items
 
         a list of items for the menu. Items can however be added later
-        with the use of the :meth:`~pyage.screens.menu.Menu.add_item` method.
+        with the use of the :meth:`~pyage.screens.Menu.add_item` method.
 
     wrap
 
@@ -36,7 +36,7 @@ class Menu(Screen):
     select_sound
 
         a sound to play when selecting an item. This is overriden by the
-        selected item's :attr:`~pyage.screens.items.menu_item.select_sound`
+        selected item's :attr:`~pyage.screens.items.MenuItem.select_sound`
         attribute.
     """
 
@@ -46,7 +46,7 @@ class Menu(Screen):
     select_sound: Optional[AssetCollection[Playable]]
     """
     a sound to play when selecting an item. This is overriden by the
-    selected item's :attr:`~pyage.screens.items.menu_item.MenuItem.select_sound`
+    selected item's :attr:`~pyage.screens.items.MenuItem.select_sound`
     attribute.
     """
 
@@ -99,7 +99,7 @@ class Menu(Screen):
         ----------
         item
 
-            the menu item (a list can be found :ref:`here as well <menu-items>`)
+            the menu item (a list can be found here as well)
         """
 
         self._items.append(item)

@@ -31,6 +31,10 @@ class TextInput(MenuItem):
         menu's :attr:`~pyage.screens.menu.Menu.selected_sound` setting when set.
     """
 
+    label: str
+
+    select_sound: Optional[AssetCollection[Playable]]
+
     _cursor: int
     text: str
     """

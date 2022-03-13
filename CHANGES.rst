@@ -2,7 +2,7 @@
 pyAGE Changelog
 ===============
 
-0.1.0-a4 (2021-?-?)
+0.1.0-a4 (2022-?-?)
 =====================
 
 Features added
@@ -19,6 +19,11 @@ Features added
 * added EventProcessor.remove_schedule_event to manually remove scheduled callbacks
 * improved internal reference management to prevent bound methods to create 
   cyclic references and therefore prevent the garbage collector from doing its work
+* added new Ao2 output backend to support speech output via accessible_output2, 
+  even on Linux and Mac OS (patch by TheQuinbox)
+* rewrote entire sound system into a more flexible asset system which supports 
+  more than just sound assets. This is a breaking change and will require you 
+  to adapt your existing pyAGE projects.
 
 Bugs fixed
 ----------
