@@ -15,7 +15,7 @@ class Asset(ABC):
     def buffer(self) -> Buffer:
         return self._buffer
 
-    def load(self) -> None:
+    def load(self, cached: bool) -> None:
         if self.buffer.loaded:
             return
 

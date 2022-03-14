@@ -34,6 +34,6 @@ class AssetCollection(Generic[T]):
         else:
             return self.get(cached=self._asset_type._prefer_caching)
 
-        asset.load()
+        asset.load(cached)
 
         return asset

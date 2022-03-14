@@ -1,6 +1,8 @@
-from typing import TYPE_CHECKING, cast
+import sys
+from typing import TYPE_CHECKING, Any, Optional, cast
 
 import pyage.app
+import pyage.event_processor
 from pyage.audio_backends.sound_wrapper import SoundWrapper
 
 from .playable import Playable
@@ -11,15 +13,27 @@ if TYPE_CHECKING:
 
 class Sound(Playable):
 
+    _ref: Optional["Sound"]
+    _prefer_caching: bool = False
     _sound: SoundWrapper
 
-    def load(self) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self._ref = None
 
-        super().load()
+    def load(self, cached: bool) -> None:
+
+        super().load(cached=cached)
 
         self._sound = cast("AudioBackend", pyage.app.App().audio_backend).create_sound(
             self.buffer
         )
+
+        if cached is False:
+            self._ref = self
+            pyage.event_processor.EventProcessor().add_schedule_event(
+                0.1, self._handle_caching, 0.1
+            )
 
     def play(self) -> None:
 
@@ -41,3 +55,11 @@ class Sound(Playable):
     @volume.setter
     def volume(self, value: float) -> None:
         self._sound.volume = value
+
+    def _handle_caching(self, data: Any) -> None:
+        if not self.playing:
+            if sys.getrefcount(self) == 4:
+                self._ref = None
+                pyage.event_processor.EventProcessor().remove_schedule_event(
+                    self._handle_caching, 0.1
+                )

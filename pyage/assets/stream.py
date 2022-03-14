@@ -13,9 +13,9 @@ class Stream(Playable):
 
     _stream: StreamWrapper
 
-    def load(self) -> None:
+    def load(self, cached: bool) -> None:
 
-        super().load()
+        super().load(cached=cached)
 
         self._stream = cast(
             "AudioBackend", pyage.app.App().audio_backend
