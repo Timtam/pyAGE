@@ -29,6 +29,9 @@ Bugs fixed
 ----------
 
 * fixed some crashes when deleting texts in menu text inputs
+* fix crash in event processor when two events of the same type get fired at 
+  the exact same time
+* fix wrong parameter type for :meth:`pyage.EventProcessor.remove_schedule_event`
 * added py.typed to properly indicate typing support
 
 0.1.0-a3 (2021-02-04)
