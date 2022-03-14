@@ -14,9 +14,10 @@ Features added
   Python 3.8. Since thats currently our main development version, we'll stick 
   with that version for a while, until we spread out to support more than just 
   one Python version.
-* added loop parameter to EventProcessor.add_schedule_event, allowing schedule 
-  events to be looped until removed manually
-* added EventProcessor.remove_schedule_event to manually remove scheduled callbacks
+* added loop parameter to :meth:`pyage.EventProcessor.add_schedule_event`, 
+  allowing schedule events to be looped until removed manually
+* added :meth:`pyage.EventProcessor.remove_schedule_event` to manually remove 
+  scheduled callbacks
 * improved internal reference management to prevent bound methods to create 
   cyclic references and therefore prevent the garbage collector from doing its work
 * added new Ao2 output backend to support speech output via accessible_output2, 
@@ -31,7 +32,6 @@ Bugs fixed
 * fixed some crashes when deleting texts in menu text inputs
 * fix crash in event processor when two events of the same type get fired at 
   the exact same time
-* fix wrong parameter type for :meth:`pyage.EventProcessor.remove_schedule_event`
 * added py.typed to properly indicate typing support
 
 0.1.0-a3 (2021-02-04)
