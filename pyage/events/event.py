@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import Any, Generic, Optional, TypeVar
+from typing import Any, Callable, Generic, Optional, TypeVar
 
 from pyage.constants import EVENT
 from pyage.reference import Reference
 
-T = TypeVar("T")
+T = TypeVar("T", bound=Callable[..., Any])
 
 
 class Event(Generic[T], ABC):

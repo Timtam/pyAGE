@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Any, List, Optional, cast
+from typing import Any, List, Optional
 
 from pyage.assets.collection import AssetCollection
 from pyage.assets.playable import Playable
@@ -116,7 +116,7 @@ class MenuItem(ABC):
 
             ev.add_key_event(
                 key=e.key,
-                function=cast(KeyEventCallback, e.function),
+                function=e.function,
                 mod=e.mod,
                 repeat=e.repeat,
                 userdata=e.userdata,

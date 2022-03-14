@@ -23,15 +23,15 @@ from pyage.types import (
 
 class EventProcessor(metaclass=PySingleton):
 
-    _event_queue: List[Tuple[float, Event]] = []
-    _registered_events: List[Event] = []
+    _event_queue: List[Tuple[float, Event[Any]]] = []
+    _registered_events: List[Event[Any]] = []
     _text_event_count: int = 0
-    _unregistered_events: List[Event] = []
+    _unregistered_events: List[Event[Any]] = []
 
     def _process_pygame_event(self, e: pygame.event.Event) -> None:
 
-        f: Optional[Event]
-        r_f: Event
+        f: Optional[Event[Any]]
+        r_f: Event[Any]
 
         if e.type == pygame.KEYDOWN or e.type == pygame.KEYUP:
 
@@ -95,7 +95,7 @@ class EventProcessor(metaclass=PySingleton):
                         ),
                     )
 
-    def _process_event(self, e: Event) -> None:
+    def _process_event(self, e: Event[Any]) -> None:
 
         keys: Sequence[bool]
 
@@ -148,7 +148,7 @@ class EventProcessor(metaclass=PySingleton):
                 ),
             )
 
-    def _unregister_event(self, e: Event) -> None:
+    def _unregister_event(self, e: Event[Any]) -> None:
 
         try:
             self._registered_events.remove(e)
@@ -158,7 +158,7 @@ class EventProcessor(metaclass=PySingleton):
     def process(self) -> None:
 
         e: pygame.event.Event
-        f: Event
+        f: Event[Any]
         events: List[pygame.event.Event]
 
         try:
@@ -281,7 +281,7 @@ class EventProcessor(metaclass=PySingleton):
             :attr:`pyage.constants.MOD.NONE`)
         """
 
-        f: Event
+        f: Event[Any]
 
         for f in self._registered_events:
             if (
@@ -304,7 +304,7 @@ class EventProcessor(metaclass=PySingleton):
             :meth:`~pyage.event_processor.EventProcessor.add_focus_event`
         """
 
-        f: Event
+        f: Event[Any]
 
         for f in self._registered_events:
             if (
@@ -393,7 +393,7 @@ class EventProcessor(metaclass=PySingleton):
             the callback function
         """
 
-        f: Event
+        f: Event[Any]
 
         for f in self._registered_events:
             if (
@@ -426,7 +426,7 @@ class EventProcessor(metaclass=PySingleton):
             the given loop time (see :meth:`pyage.event_processor.EventProcessor.add_schedule_event`)
         """
 
-        f: Event
+        f: Event[Any]
 
         for f in self._registered_events:
             if (

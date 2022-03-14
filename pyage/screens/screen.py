@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Any, List, cast
+from typing import Any, List
 
 from pyage.constants import KEY, MOD
 from pyage.event_processor import EventProcessor
@@ -96,7 +96,7 @@ class Screen(ABC):
 
             self._event_processor.add_key_event(
                 key=e.key,
-                function=cast(KeyEventCallback, e.function),
+                function=e.function,
                 mod=e.mod,
                 repeat=e.repeat,
                 userdata=e.userdata,
