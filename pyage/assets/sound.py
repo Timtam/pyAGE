@@ -63,3 +63,11 @@ class Sound(Playable):
                 pyage.event_processor.EventProcessor().remove_schedule_event(
                     self._handle_caching, 0.1
                 )
+
+    @property
+    def looping(self) -> bool:
+        return self._sound.looping
+
+    @looping.setter
+    def looping(self, looping: bool) -> None:
+        self._sound.looping = looping

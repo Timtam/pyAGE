@@ -27,3 +27,12 @@ class Playable(Asset):
         # mypy seems to have an issue with abstract setters
         # so we'll avoid those for now
         raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def looping(self) -> bool:
+        pass
+
+    @looping.setter
+    def looping(self, looping: bool) -> None:
+        raise NotImplementedError

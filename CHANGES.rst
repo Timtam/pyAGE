@@ -25,6 +25,10 @@ Features added
 * rewrote entire sound system into a more flexible asset system which supports 
   more than just sound assets. This is a breaking change and will require you 
   to adapt your existing pyAGE projects.
+* added a new :class:`pyage.assets.Stream` asset which allows you to stream 
+  stereo audio instead of just playing back mono audio sources.
+* added :attr:`pyage.assets.Playable.looping` option to allow looping sounds and
+  streams.
 
 Bugs fixed
 ----------

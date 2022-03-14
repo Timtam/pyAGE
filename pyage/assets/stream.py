@@ -45,3 +45,11 @@ class Stream(Playable):
     @volume.setter
     def volume(self, value: float) -> None:
         self._stream.volume = value
+
+    @property
+    def looping(self) -> bool:
+        return self._stream.looping
+
+    @looping.setter
+    def looping(self, looping: bool) -> None:
+        self._stream.looping = looping

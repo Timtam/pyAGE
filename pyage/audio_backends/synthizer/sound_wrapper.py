@@ -12,6 +12,7 @@ class SynthizerSoundWrapper(SoundWrapper):
     _context: synthizer.Context
     _generator: synthizer.BufferGenerator
     _last_position: float
+    _looping: bool
     _source: synthizer.Source3D
 
     def __init__(
@@ -33,6 +34,7 @@ class SynthizerSoundWrapper(SoundWrapper):
         self._source.pause()
 
         self._last_position = 0.0
+        self._looping = False
 
     def play(self) -> None:
 
@@ -72,3 +74,12 @@ class SynthizerSoundWrapper(SoundWrapper):
     @volume.setter
     def volume(self, value: float) -> None:
         self._generator.gain.value = value
+
+    @property
+    def looping(self) -> bool:
+        return self._looping
+
+    @looping.setter
+    def looping(self, looping: bool) -> None:
+        self._looping = looping
+        self._generator.looping.value = looping

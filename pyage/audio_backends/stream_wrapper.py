@@ -26,4 +26,13 @@ class StreamWrapper(ABC):
 
     @volume.setter
     def volume(self, value: float) -> None:
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def looping(self) -> bool:
         pass
+
+    @looping.setter
+    def looping(self, looping: bool) -> None:
+        raise NotImplementedError

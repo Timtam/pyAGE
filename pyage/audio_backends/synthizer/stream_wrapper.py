@@ -12,6 +12,7 @@ class SynthizerStreamWrapper(StreamWrapper):
     _context: synthizer.Context
     _generator: synthizer.BufferGenerator
     _last_position: float
+    _looping: bool
     _source: synthizer.DirectSource
 
     def __init__(
@@ -33,6 +34,7 @@ class SynthizerStreamWrapper(StreamWrapper):
         self._source.pause()
 
         self._last_position = 0.0
+        self._looping = False
 
     def play(self, restart: bool) -> None:
 
@@ -81,3 +83,12 @@ class SynthizerStreamWrapper(StreamWrapper):
     @volume.setter
     def volume(self, value: float) -> None:
         self._generator.gain.value = value
+
+    @property
+    def looping(self) -> bool:
+        return self._looping
+
+    @looping.setter
+    def looping(self, looping: bool) -> None:
+        self._looping = looping
+        self._generator.looping.value = looping
