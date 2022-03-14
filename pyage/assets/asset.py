@@ -6,6 +6,7 @@ from .buffer import Buffer
 class Asset(ABC):
 
     _buffer: Buffer
+    _prefer_caching: bool = True
 
     def __init__(self, buffer: Buffer) -> None:
         self._buffer = buffer

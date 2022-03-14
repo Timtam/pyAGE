@@ -140,7 +140,7 @@ class AssetManager(metaclass=PySingleton):
 
             found: List[str] = fnmatch.filter(self._buffers.keys(), name)
 
-            return AssetCollection([type(self._buffers[n]) for n in found])
+            return AssetCollection([self._buffers[n] for n in found], type)
 
         return None
 
