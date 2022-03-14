@@ -23,6 +23,16 @@ class Event(Generic[T], ABC):
             return self._type == other._type and self._function == other._function
         return NotImplemented
 
+    def __lt__(self, other: Any) -> bool:
+        if isinstance(other, Event):
+            return False
+        return NotImplemented
+
+    def __gt__(self, other: Any) -> bool:
+        if isinstance(other, Event):
+            return False
+        return NotImplemented
+
     def __call__(self) -> None:
 
         if self._function.is_alive():
