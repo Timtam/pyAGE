@@ -409,7 +409,7 @@ class EventProcessor(metaclass=PySingleton):
             pygame.key.stop_text_input()
 
     def remove_schedule_event(
-        self, function: FocusEventCallback, loop: float = 0.0
+        self, function: ScheduleEventCallback, loop: float = 0.0
     ) -> None:
         """
         removes a previously registered scheduled callback
