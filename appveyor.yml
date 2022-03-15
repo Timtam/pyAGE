@@ -21,7 +21,7 @@ install:
   - cmd: |
       %PYTHON%\python.exe --version
       %PYTHON%\Scripts\pip.exe --version
-      %PYTHON%\python.exe -m pip install -r requirements-dev.txt
+      %PYTHON%\python.exe -m pip install -e .[dev]
 build_script:
   - cmd: |
       %PYTHON%\\python.exe setup.py bdist_wheel --universal
