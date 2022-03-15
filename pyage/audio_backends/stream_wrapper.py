@@ -36,3 +36,17 @@ class StreamWrapper(ABC):
     @looping.setter
     def looping(self, looping: bool) -> None:
         raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def position(self) -> float:
+        pass
+
+    @position.setter
+    def position(self, position: float) -> None:
+        raise NotImplementedError()
+
+    @property
+    @abstractmethod
+    def length(self) -> float:
+        pass

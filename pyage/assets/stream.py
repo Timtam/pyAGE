@@ -53,3 +53,15 @@ class Stream(Playable):
     @looping.setter
     def looping(self, looping: bool) -> None:
         self._stream.looping = looping
+
+    @property
+    def position(self) -> float:
+        return self._stream.position
+
+    @position.setter
+    def position(self, position: float) -> None:
+        self._stream.position = position
+
+    @property
+    def length(self) -> float:
+        return self._stream.length

@@ -12,6 +12,7 @@ class SynthizerStreamWrapper(StreamWrapper):
     _context: synthizer.Context
     _generator: synthizer.BufferGenerator
     _last_position: float
+    _length: float
     _looping: bool
     _source: synthizer.DirectSource
 
@@ -34,6 +35,7 @@ class SynthizerStreamWrapper(StreamWrapper):
         self._source.pause()
 
         self._last_position = 0.0
+        self._length = -1
         self._looping = False
 
     def play(self, restart: bool) -> None:
@@ -92,3 +94,21 @@ class SynthizerStreamWrapper(StreamWrapper):
     def looping(self, looping: bool) -> None:
         self._looping = looping
         self._generator.looping.value = looping
+
+    @property
+    def position(self) -> float:
+        self._last_position = self._generator.playback_position.value
+        return self._last_position
+
+    @position.setter
+    def position(self, position: float) -> None:
+        self._last_position = position
+        self._generator.playback_position.value = self._last_position
+
+    @property
+    def length(self) -> float:
+
+        if self._length < 0:
+            self._length = self._buffer.get_length_in_seconds()
+
+        return self._length

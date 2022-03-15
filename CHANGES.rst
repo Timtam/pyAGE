@@ -29,6 +29,9 @@ Features added
   stereo audio instead of just playing back mono audio sources.
 * added :attr:`pyage.assets.Playable.looping` option to allow looping sounds and
   streams.
+* added :attr:`pyage.assets.Playable.position` and 
+  :attr:`pyage.assets.Playable.length` attributes to control playback position 
+  within sounds and streams.
 
 Bugs fixed
 ----------

@@ -71,3 +71,15 @@ class Sound(Playable):
     @looping.setter
     def looping(self, looping: bool) -> None:
         self._sound.looping = looping
+
+    @property
+    def position(self) -> float:
+        return self._sound.position
+
+    @position.setter
+    def position(self, position: float) -> None:
+        self._sound.position = position
+
+    @property
+    def length(self) -> float:
+        return self._sound.length
