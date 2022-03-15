@@ -1,11 +1,10 @@
 -r requirements.txt
-black==20.8b1
+accessible_output2 @ git+https://github.com/accessibleapps/accessible_output2@327bdea5e0a079bc507e341c1cb4631206675a2d#egg=accessible_output2 ; sys_platform == "win32"
+black==22.1.0
 flake8==4.0.1
 isort==5.10.1
-mypy==0.910
-pre-commit==2.16.0
-pytest==6.2.5
-pytest-mock==3.6.1
+mypy==0.941
+pre-commit==2.17.0
 sphinx==4.4.0
-sphinx-autodoc-typehints==1.15.2
-wheel==0.37.1
+sphinx-autodoc-typehints==1.17.0
+wheel

@@ -2,4 +2,4 @@ cytolk==0.1.11; sys_platform == 'win32'
 pygame==2.1.2
 python-singleton-metaclasses==0.2.0
 synthizer==0.12.0; sys_platform == 'win32'
-accessible_output2@git+https://www.github.com/accessibleapps/accessible_output2@327bdea5e0a079bc507e341c1cb4631206675a2d#egg=accessible_output2
+accessible_output2 @ git+https://github.com/accessibleapps/accessible_output2@327bdea5e0a079bc507e341c1cb4631206675a2d#egg=accessible_output2 ; sys_platform != "win32"
