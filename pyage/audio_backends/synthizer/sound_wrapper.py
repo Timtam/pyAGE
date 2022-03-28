@@ -1,5 +1,3 @@
-from typing import cast
-
 import synthizer
 
 from pyage.assets.buffer import Buffer
@@ -71,7 +69,7 @@ class SynthizerSoundWrapper(SoundWrapper):
 
     @property
     def volume(self) -> float:
-        return cast(float, self._generator.gain.value)
+        return self._generator.gain.value
 
     @volume.setter
     def volume(self, value: float) -> None:
