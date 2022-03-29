@@ -15,13 +15,13 @@ environment:
 stack: python %STACK%
 
 install:
-  - ps: |
-      $version = &"$($env:PYTHON)\python.exe" -c --% "from pyage import __version__; import sys; _ = sys.stdout.write(__version__)"
-      Update-AppveyorBuild -Version "$($version)+$($env:APPVEYOR_BUILD_NUMBER)"
   - cmd: |
       %PYTHON%\python.exe --version
       %PYTHON%\Scripts\pip.exe --version
       %PYTHON%\python.exe -m pip install -r requirements-dev.txt
+  - ps: |
+      $version = &"$($env:PYTHON)\python.exe" -c --% "from pyage.version import __version__; import sys; _ = sys.stdout.write(__version__)"
+      Update-AppveyorBuild -Version "$($version)+$($env:APPVEYOR_BUILD_NUMBER)"
 build_script:
   - cmd: |
       %PYTHON%\\python.exe setup.py bdist_wheel --universal
@@ -31,7 +31,7 @@ artifacts:
 
 deploy:
   auth_token:
-    secure: PFPMLUtwkaBjEP5FyQP3hgsHMRr5Uejw1eL6aOQKOIl1S1iAx1QcdVpmtZv/FKxC
+    secure: nDRVQFKcEJ6fVXxCI19uErnRxs6f88vuto7OZ8BYR+GN3fX6pzZzlyBGeKdrKpgA
   description: 'pyAGE release, see readme or changelog for more information'
   provider: GitHub
   artifact: dist/*.whl
