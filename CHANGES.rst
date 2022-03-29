@@ -10,10 +10,7 @@ Features added
 
 * updated dev-dependencies to latest versions
 * updated pygame to v2.1.2
-* updated synthizer to v0.12.0, which is the latest official version supporting 
-  Python 3.8. Since thats currently our main development version, we'll stick 
-  with that version for a while, until we spread out to support more than just 
-  one Python version.
+* updated synthizer to v0.12.3
 * added loop parameter to :meth:`pyage.EventProcessor.add_schedule_event`, 
   allowing schedule events to be looped until removed manually
 * added :meth:`pyage.EventProcessor.remove_schedule_event` to manually remove 
