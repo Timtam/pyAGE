@@ -2,6 +2,19 @@
 pyAGE Changelog
 ===============
 
+0.1.0-a7 (2022-??-??)
+=====================
+
+Features added
+--------------
+
+Other changes
+-------------
+
+* added installation documentation, listing all the optional/default 
+  dependencies that might need to be installed manually.
+* removed ao2 from dependencies since git links are not compatible with PyPI
+
 0.1.0-a6 (2022-03-29)
 =====================
 

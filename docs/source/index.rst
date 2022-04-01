@@ -27,6 +27,16 @@ But what can it do for you?
 - menu system with multiple item types to choose from like buttons, sliders or input fields
 - and much, much more later on
 
+Installation
+------------
+
+We've got a comprehensive guide ready for you if you want to install pyAGE and its dependencies right away.
+
+.. toctree::
+   :maxdepth: 2
+   
+   installation
+
 Getting started / tutorial
 --------------------------
 

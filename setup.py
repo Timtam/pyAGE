@@ -26,9 +26,6 @@ setup(
     },
     install_requires=requirements.splitlines(),
     extras_require={
-        "ao2": [
-            "accessible_output2 @ git+https://github.com/accessibleapps/accessible_output2@327bdea5e0a079bc507e341c1cb4631206675a2d#egg=accessible_output2",
-        ],
         "dev": dev_requirements.splitlines()[1:],
     },
 )
