@@ -19,8 +19,8 @@ install:
       %PYTHON%\python.exe --version
       %PYTHON%\Scripts\pip.exe --version
       %PYTHON%\python.exe -m pip install -r requirements-dev.txt
-  - pwsh: |
-      &"$($env:PYTHON)\python.exe" -c --% "from pyage import __version__; import sys; _ = sys.stderr.write(__version__)" 2>variable:version
+  - ps: |
+      $version=&"$($env:PYTHON)\python.exe" -c --% "from pyage import __version__; import sys; _ = sys.stderr.write(__version__)" 2>&1 1>nul
       Update-AppveyorBuild -Version "$($version)+$($env:APPVEYOR_BUILD_NUMBER)"
 build_script:
   - cmd: |
