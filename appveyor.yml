@@ -19,7 +19,7 @@ install:
       %PYTHON%\python.exe --version
       %PYTHON%\Scripts\pip.exe --version
       %PYTHON%\python.exe -m pip install -r requirements-dev.txt
-      %PYTHON%\python.exe -c "import os; import subprocess; import sys; from pyage import __version__; subprocess.run(['appveyor', 'UpdateBuild', '-Version', __version__ + '+' + os.environ['APPVEYOR_BUILD_NUMBER']"
+      %PYTHON%\python.exe -c "import os; import subprocess; import sys; from pyage import __version__; subprocess.run(['appveyor', 'UpdateBuild', '-Version', __version__ + '+' + os.environ['APPVEYOR_BUILD_NUMBER'])"
 build_script:
   - cmd: |
       %PYTHON%\\python.exe setup.py bdist_wheel --universal
