@@ -6,7 +6,7 @@ environment:
   PYPI_PASSWORD:
     secure: g599B1DPNusI9H8GYIq6yn4CiRsVMRqtDm9nyb7MEjQ=
   matrix:
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
       PYTHON: "C:\\Python38"
       PYTHON_VERSION: "3.8"
       PYTHON_ARCH: "32"
