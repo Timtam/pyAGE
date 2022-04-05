@@ -12,7 +12,8 @@ class SynthizerSoundWrapper(SoundWrapper):
     _last_position: float
     _length: float
     _looping: bool
-    _source: synthizer.Source3D
+    _pan: float
+    _source: synthizer.ScalarPannedSource
 
     def __init__(
         self,
@@ -28,13 +29,14 @@ class SynthizerSoundWrapper(SoundWrapper):
         self._generator = synthizer.BufferGenerator(self._context)
         self._generator.buffer.value = self._buffer
 
-        self._source = synthizer.Source3D(self._context)
+        self._source = synthizer.ScalarPannedSource(self._context)
         self._source.add_generator(self._generator)
         self._source.pause()
 
         self._last_position = 0.0
         self._length = -1
         self._looping = False
+        self._pan = 0.0
 
     def play(self) -> None:
 
@@ -101,3 +103,12 @@ class SynthizerSoundWrapper(SoundWrapper):
             self._length = self._buffer.get_length_in_seconds()
 
         return self._length
+
+    @property
+    def pan(self) -> float:
+        return self._pan
+
+    @pan.setter
+    def pan(self, value: float) -> None:
+        self._pan = value
+        self._source.panning_scalar.value = value

@@ -56,6 +56,14 @@ class Sound(Playable):
     def volume(self, value: float) -> None:
         self._sound.volume = value
 
+    @property
+    def pan(self) -> float:
+        return self._sound.pan
+
+    @pan.setter
+    def pan(self, value: float) -> None:
+        self._sound.pan = value
+
     def _handle_caching(self, data: Any) -> None:
         if not self.playing:
             if sys.getrefcount(self) == 4:

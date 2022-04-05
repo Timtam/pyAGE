@@ -46,3 +46,12 @@ class SoundWrapper(ABC):
     @abstractmethod
     def length(self) -> float:
         pass
+
+    @property
+    @abstractmethod
+    def pan(self) -> float:
+        pass
+
+    @pan.setter
+    def pan(self, value: float) -> None:
+        raise NotImplementedError()

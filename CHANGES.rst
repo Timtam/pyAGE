@@ -8,6 +8,9 @@ pyAGE Changelog
 Features added
 --------------
 
+* added :attr:`pyage.assets.Sound.pan` attribute to pan sounds within the 
+  stereo field
+
 Other changes
 -------------
 
