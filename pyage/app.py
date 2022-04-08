@@ -64,7 +64,11 @@ class App(metaclass=PySingleton):
         output_backend
 
             a custom screen reader backend to use, default None, which will
-            use cytolk for communicating with screen readers.
+            use cytolk for communicating with screen readers when under Windows,
+            and accessible_output2 when running under other operating systems.
+            Please note that accessible_output2 doesn't get installed by
+            default, see the :ref:`additional-packages` section for more
+            information.
         """
 
         self._fps = fps
@@ -72,9 +76,14 @@ class App(metaclass=PySingleton):
 
         if output_backend is None:
             try:
-                from pyage.output_backends.tolk import Tolk
+                if sys.platform == "win32":
+                    from pyage.output_backends.tolk import Tolk
 
-                self._output_backend = Tolk()
+                    self._output_backend = Tolk()
+                else:
+                    from pyage.output_backends.ao2 import Ao2
+
+                    self._output_backend = Ao2()
             except ImportError:
                 self._output_backend = None
 

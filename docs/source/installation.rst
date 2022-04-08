@@ -54,7 +54,7 @@ pyAGE depends on various packages which will not be installed by default with it
      - pyage.output_backends.ao2
      - Windows, Mac OS, Linux
      - Screen Reader support for JAWS, NVDA, PC Talker, System Access, Window-Eyes, Dolphin, ZDSR, SAPI4 and SAPI5 on Windows, VoiceOver on Mac OS, eSpeak and Speech Dispatcher under Linux
-     - the latest version of accessible_output2 on PyPI is outdated and e.g. lacks support for ZDSR under Windows. For that reason, you'll probably want to install directly from the Git repository here: `<https://github.com/accessibleapps/accessible_output2>`_
+     - the latest version of accessible_output2 on PyPI is outdated and e.g. lacks support for ZDSR under Windows. For that reason, you'll probably want to install directly from the Git repository here: `<https://github.com/accessibleapps/accessible_output2>`_. Even though ao2 is the default output backend under every other OS than Windows, it won't get installed by default, leaving you the choice to install either the outdated version from PyPI or the up-to-date version from Github.
    * - synthizer
      - pyage.audio_backends.synthizer
      - Windows
