@@ -17,6 +17,8 @@ Features added
 Other changes
 -------------
 
+* :class:`pyage.output_backends.Ao2` is now the default output backend for 
+  every OS except Windows.
 * added installation documentation, listing all the optional/default 
   dependencies that might need to be installed manually.
 * removed ao2 from dependencies since git links are not compatible with PyPI
