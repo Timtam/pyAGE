@@ -10,6 +10,9 @@ Features added
 
 * added :attr:`pyage.assets.Sound.pan` attribute to pan sounds within the 
   stereo field
+* added :attr:`pyage.screens.Menu.pan` to automatically pan all items within 
+  the menu to a position in the stereo field, depending on the amount of items 
+  within the menu
 
 Other changes
 -------------

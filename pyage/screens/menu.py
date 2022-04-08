@@ -1,7 +1,7 @@
 from typing import Any, List, Optional, cast
 
 from pyage.assets.collection import AssetCollection
-from pyage.assets.playable import Playable
+from pyage.assets.sound import Sound
 from pyage.constants import KEY
 from pyage.screens.items.menu_item import MenuItem
 from pyage.screens.screen import Screen
@@ -38,12 +38,17 @@ class Menu(Screen):
         a sound to play when selecting an item. This is overriden by the
         selected item's :attr:`~pyage.screens.items.MenuItem.select_sound`
         attribute.
+
+    pan
+
+        pan the select_sound according to the position in the menu? (first item
+        is 100% left, last item is 100% right)
     """
 
     _item_index: int
     _items: List[MenuItem]
 
-    select_sound: Optional[AssetCollection[Playable]]
+    select_sound: Optional[AssetCollection[Sound]]
     """
     a sound to play when selecting an item. This is overriden by the
     selected item's :attr:`~pyage.screens.items.MenuItem.select_sound`
@@ -56,17 +61,25 @@ class Menu(Screen):
     the menu will reset the cursor to the opposite end of the menu)?
     """
 
+    pan: bool
+    """
+    pan the select_sound according to the position in the menu? (first item
+    is 100% left, last item is 100% right)
+    """
+
     def __init__(
         self,
         items: List[MenuItem] = [],
         wrap: bool = False,
-        select_sound: Optional[AssetCollection[Playable]] = None,
+        select_sound: Optional[AssetCollection[Sound]] = None,
+        pan: bool = False,
     ) -> None:
 
         super().__init__()
 
         self._item_index = 0
         self._items = items
+        self.pan = pan
         self.select_sound = select_sound
         self.wrap = wrap
 
@@ -106,7 +119,7 @@ class Menu(Screen):
 
     def select_previous_item(self, pressed: bool, userdata: Any) -> None:
 
-        snd: Optional[Playable] = None
+        snd: Optional[Sound] = None
 
         if not pressed:
             return
@@ -123,19 +136,23 @@ class Menu(Screen):
 
         if self._items[self._item_index].select_sound:
             snd = cast(
-                AssetCollection[Playable], self._items[self._item_index].select_sound
+                AssetCollection[Sound], self._items[self._item_index].select_sound
             ).get()
         elif self.select_sound:
             snd = self.select_sound.get()
 
         if snd:
+            if self.pan:
+                snd.pan = self.get_item_pan_position(self._item_index, len(self._items))
+            else:
+                snd.pan = 0.0
             snd.play()
 
         self._items[self._item_index].select()
 
     def select_next_item(self, pressed: bool, userdata: Any) -> None:
 
-        snd: Optional[Playable] = None
+        snd: Optional[Sound] = None
 
         if not pressed:
             return
@@ -152,12 +169,36 @@ class Menu(Screen):
 
         if self._items[self._item_index].select_sound:
             snd = cast(
-                AssetCollection[Playable], self._items[self._item_index].select_sound
+                AssetCollection[Sound], self._items[self._item_index].select_sound
             ).get()
         elif self.select_sound:
             snd = self.select_sound.get()
 
         if snd:
+            if self.pan:
+                snd.pan = self.get_item_pan_position(self._item_index, len(self._items))
+            else:
+                snd.pan = 0.0
             snd.play()
 
         self._items[self._item_index].select()
+
+    @staticmethod
+    def get_item_pan_position(item_index: int, item_count: int) -> float:
+
+        pos: List[float]
+
+        if item_count == 1:
+            pos = [0]
+        elif item_count == 2:
+            pos = [-0.2, 0.2]
+        elif item_count == 3:
+            pos = [-0.4, 0, 0.4]
+        elif item_count == 4:
+            pos = [-0.6, -0.2, 0.2, 0.6]
+        elif item_count == 5:
+            pos = [-1.0, -0.5, 0, 0.5, 1.0]
+        elif item_count > 5:
+            pos = [(-1.0 + (2.0 / (item_count - 1)) * i) for i in range(item_count)]
+
+        return pos[item_index]
