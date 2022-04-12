@@ -1,6 +1,6 @@
 from cytolk import tolk
 
-from pyage.output_backend import OutputBackend
+from .output_backend import OutputBackend
 
 
 class Tolk(OutputBackend):

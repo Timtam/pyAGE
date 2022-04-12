@@ -8,7 +8,7 @@ from pysingleton import PySingleton
 from pyage.audio_backends.audio_backend import AudioBackend
 
 from .event_processor import EventProcessor
-from .output_backend import OutputBackend
+from .output_backends.output_backend import OutputBackend
 from .screen_stack import ScreenStack
 
 

@@ -1,6 +1,6 @@
 import accessible_output2.outputs
 
-from pyage.output_backend import OutputBackend
+from .output_backend import OutputBackend
 
 
 class Ao2(OutputBackend):
