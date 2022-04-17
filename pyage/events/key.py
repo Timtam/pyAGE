@@ -36,6 +36,7 @@ class KeyEvent(Event[KeyEventCallback]):
                 self._key == other._key
                 and self._mod == other._mod
                 and self._function == other._function
+                and self._repeat == other._repeat
             )
 
         return NotImplemented
