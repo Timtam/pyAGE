@@ -5,6 +5,12 @@ pyAGE Changelog
 0.1.0-a8 (2022-??-??)
 =====================
 
+Features added
+--------------
+
+* added :meth:`pyage.EventProcessor.is_pressed` to quickly check if a given key 
+  was pressed.
+
 Other changes
 -------------
 

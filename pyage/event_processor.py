@@ -436,3 +436,17 @@ class EventProcessor(metaclass=PySingleton):
                 and cast(ScheduleEvent, f).loop == loop
             ):
                 self._unregistered_events.append(f)
+
+    def is_pressed(self, key: KEY) -> bool:
+        """
+        checks if a specific key was pressed. Can be used whenever you just
+        quickly need to check for a key instead of registering a specific callback.
+
+        Parameters
+        ----------
+        key
+
+            the key that you want to check
+        """
+
+        return pygame.key.get_pressed()[key]
