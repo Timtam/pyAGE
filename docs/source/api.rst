@@ -7,4 +7,4 @@ API Reference
    pyage
    pyage.assets
    pyage.screens
-   pyage.screens.items
+   pyage.screens.menu

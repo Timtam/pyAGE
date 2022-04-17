@@ -7,14 +7,9 @@ pre-defined screens can be found within this package.
 .. autosummary::
    :toctree:
 
-   Menu
    Screen
 """
 
-from pyage.screens.menu import Menu
 from pyage.screens.screen import Screen
 
-__all__ = (
-    "Menu",
-    "Screen",
-)
+__all__ = ("Screen",)

@@ -2,6 +2,14 @@
 pyAGE Changelog
 ===============
 
+0.1.0-a8 (2022-??-??)
+=====================
+
+Other changes
+-------------
+
+* menu screen was moved into pyage.screens.menu sub-package along with menu items.
+
 0.1.0-a7 (2022-04-12)
 =====================
 
@@ -17,7 +25,7 @@ Features added
 Other changes
 -------------
 
-* :class:`pyage.output_backends.Ao2` is now the default output backend for 
+* :class:`pyage.output_backends.ao2.Ao2` is now the default output backend for 
   every OS except Windows.
 * added installation documentation, listing all the optional/default 
   dependencies that might need to be installed manually.
