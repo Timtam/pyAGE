@@ -111,14 +111,12 @@ class EventProcessor(metaclass=PySingleton):
 
                 keys = pygame.key.get_pressed()
 
-                if (
-                    cast(KeyEvent, e).mod == 0 and not bool(keys[cast(KeyEvent, e).key])
-                ) or (
+                if (cast(KeyEvent, e).mod == 0 and not keys[cast(KeyEvent, e).key]) or (
                     cast(KeyEvent, e).mod != 0
                     and (
                         pygame.key.get_mods() & cast(KeyEvent, e).mod
                         != cast(KeyEvent, e).mod
-                        or not bool(keys[cast(KeyEvent, e).key])
+                        or not keys[cast(KeyEvent, e).key]
                     )
                 ):
                     return
@@ -134,11 +132,7 @@ class EventProcessor(metaclass=PySingleton):
 
         e()
 
-        if (
-            e.type == EVENT.SCHEDULE
-            and cast(ScheduleEvent, e).loop > 0
-            and e not in self._unregistered_events
-        ):
+        if e.type == EVENT.SCHEDULE and cast(ScheduleEvent, e).loop > 0:
 
             heapq.heappush(
                 self._event_queue,
@@ -436,17 +430,3 @@ class EventProcessor(metaclass=PySingleton):
                 and cast(ScheduleEvent, f).loop == loop
             ):
                 self._unregistered_events.append(f)
-
-    def is_pressed(self, key: KEY) -> bool:
-        """
-        checks if a specific key was pressed. Can be used whenever you just
-        quickly need to check for a key instead of registering a specific callback.
-
-        Parameters
-        ----------
-        key
-
-            the key that you want to check
-        """
-
-        return pygame.key.get_pressed()[key]
